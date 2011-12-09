@@ -100,12 +100,12 @@ void TSageEngine::initialize() {
 
 		// Reset all global variables
 		R2_GLOBALS.reset();
-	} else if (g_vm->getGameID() == GType_Geekwad) {
+	} else if (g_vm->getGameID() == GType_Geekwad2) {
 		g_resourceManager->addLib("GEEKWAD.RLB");
-		g_globals = new Geekwad::GeekwadGlobals();
+		g_globals = new Geekwad2::Geekwad2Globals();
 
 		// Reset all global variables
-		GW_GLOBALS.reset();
+		GW2_GLOBALS.reset();
 	}		
 
 	g_globals->gfxManager().setDefaults();

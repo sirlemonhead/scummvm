@@ -23,7 +23,7 @@
 #include "tsage/globals.h"
 #include "tsage/tsage.h"
 #include "tsage/blue_force/blueforce_logic.h"
-#include "tsage/geekwad/geekwad_logic.h"
+#include "tsage/geekwad2/geekwad2_logic.h"
 #include "tsage/ringworld/ringworld_demo.h"
 #include "tsage/ringworld/ringworld_logic.h"
 #include "tsage/ringworld2/ringworld2_logic.h"
@@ -88,7 +88,7 @@ Globals::Globals() : _dialogCenter(160, 140), _gfxManagerInstance(_screenSurface
 		_color2 = 15;
 		_color3 = 4;
 		_dialogCenter.y = 100;
-	} else if (g_vm->getGameID() == GType_Geekwad) {
+	} else if (g_vm->getGameID() == GType_Geekwad2) {
 		// Blue Force
 		_gfxFontNumber = 0;
 		_gfxColors.background = 89;
@@ -154,7 +154,10 @@ Globals::Globals() : _dialogCenter(160, 140), _gfxManagerInstance(_screenSurface
 		break;
 
 	case GType_Geekwad:
-		_game = new Geekwad::GeekwadGame();
+		error("Geekwad not yet supported");
+
+	case GType_Geekwad2:
+		_game = new Geekwad2::Geekwad2Game();
 		_inventory = NULL;
 		_sceneHandler = new SceneHandler();
 		break;

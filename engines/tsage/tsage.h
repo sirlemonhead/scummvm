@@ -42,7 +42,8 @@ enum {
 	GType_Ringworld = 0,
 	GType_BlueForce = 1,
 	GType_Ringworld2 = 2,
-	GType_Geekwad = 3
+	GType_Geekwad = 3,
+	GType_Geekwad2 = 4
 };
 
 enum {
