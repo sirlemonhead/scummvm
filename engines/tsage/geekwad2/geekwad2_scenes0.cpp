@@ -30,6 +30,146 @@ namespace TsAGE {
 namespace Geekwad2 {
 
 /*--------------------------------------------------------------------------
+ * Scene 60 - King's Container
+ *
+ *--------------------------------------------------------------------------*/
+
+void Scene60::Action1::signal() {
+	Scene60 *scene = (Scene60 *)GW2_GLOBALS._sceneManager._scene;
+
+	switch (_actionIndex++) {
+	case 0:
+		scene->setCursor(1, 0);
+		
+		// Reset the lock display
+		for (int idx = 0; idx < 5; ++idx) {
+			if (!GW2_GLOBALS._lockDigits[idx])
+				GW2_GLOBALS._lockDisplay[idx] = 'A';
+		}
+
+		scene->_field30A = 1;
+		scene->_bgSceneObjects.clear();
+
+		scene->_object6.remove();
+		scene->_object4.remove();
+		scene->_object5.remove();
+
+		scene->loadScene(8025);
+		scene->_stripManager.start(9080, this);
+		break;
+
+	case 1:
+		GW2_GLOBALS._sceneManager.changeScene(510);
+		break;
+	default:
+		break;
+	}
+}
+
+void Scene60::Action2::signal() {
+	Scene60 *scene = (Scene60 *)GW2_GLOBALS._sceneManager._scene;
+
+	switch (_actionIndex++) {
+	case 0:
+		setDelay(3);
+		break;
+	case 1: {
+		if (GW2_GLOBALS._lockDigits[0] == 1) {
+			scene->_list2[0].setup(6002, 4, 1, 146, 102, 130, 0);
+			scene->_list2[0].draw();
+			scene->_list3[0]._fontFgColor2 = 50;
+		} else {
+			scene->_list3[0]._fontFgColor2 = 0;
+		}
+
+		scene->_list3[0]._maxWidth = 180;
+		scene->_list3[0]._fontNumber = 71;
+		scene->_list3[0]._fontFgColor = 61;
+		scene->_list3[0]._fontBgColor = 59;
+		scene->_list3[0]._textMode = ALIGN_CENTER;
+
+		scene->_lockCombo[0] = GW2_GLOBALS._lockDisplay[0];
+
+
+
+		break;
+	}
+	default:
+		break;
+	}
+}
+
+/*--------------------------------------------------------------------------*/
+
+Scene60::Scene60(): SceneExt() {
+	_field30A = _field742 = _field744 = _field746 = 0;
+	Common::set_to(&_lockCombo[0], &_lockCombo[5], 0);
+
+	_list1[0]._pt = Common::Point(17, 18);
+	_list1[1]._pt = Common::Point(142, 99);
+	_list1[2]._pt = Common::Point(153, 99);
+	_list1[3]._pt = Common::Point(164, 99);
+	_list1[4]._pt = Common::Point(175, 99);
+	_list1[5]._pt = Common::Point(186, 99);
+	_list1[6]._pt = Common::Point(165, 65);
+
+	if (GW2_GLOBALS._v470BC == 1) {
+		_list1[1]._v = 0;
+		_list1[2]._v = 0;
+		_list1[3]._v = 0;
+		_list1[4]._v = 0;
+		_list1[5]._v = 0;
+		_list1[6]._v = 1;
+	} else {
+		_list1[6]._v = 0;
+	}
+
+	int max = 32000;
+	for (int idx = 0; idx < 7; ++idx) {
+		if (_list1[idx]._v != 0) {
+			int diff = ABS(GW2_GLOBALS._events._mousePos.x - _list1[idx]._pt.x) +
+					ABS(GW2_GLOBALS._events._mousePos.y - _list1[idx]._pt.y);
+			if (diff < max) {
+				max = diff;
+				_field746 = idx;
+			}
+		}
+	}
+}
+
+void Scene60::postInit(SceneObjectList *OwnerList) {
+	SceneExt::postInit();
+	_stripManager.addSpeaker(&_cybSpeaker);
+
+	setCursor(2, 1);
+	resetCursor();
+	loadScene(6002);
+
+	_object4.postInit();
+	_object4.setVisage(6002);
+	_object4.setStrip(2);
+	_object4.setFrame(1);
+	_object4.fixPriority(250);
+	_object4.setPosition(Common::Point(193, 158));
+
+	_object5.postInit();
+	_object5.setVisage(6002);
+	_object5.setStrip(3);
+	_object5.setFrame(1);
+	_object5._numFrames = 5;
+	_object5.fixPriority(250);
+	_object5.setPosition(Common::Point(174, 163));
+
+	setAction(&_action2);
+}
+
+void Scene60::remove() {
+	restoreCursor();
+	saveHistory();
+	remove();
+}
+
+/*--------------------------------------------------------------------------
  * Scene 150 - Tsunami Title Screen
  *
  *--------------------------------------------------------------------------*/

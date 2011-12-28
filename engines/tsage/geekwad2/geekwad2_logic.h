@@ -44,8 +44,12 @@ class SceneExt: public Scene {
 public:
 public:
 	SceneExt();
-
 	virtual Common::String getClassName() { return "SceneExt"; }
+	
+	void setCursor(int v1, int v2) { warning("TODO: SceneExt::setCursor"); }
+	void resetCursor() { warning("TODO: SceneExt::resetCursor"); }
+	void restoreCursor() { warning("TODO: SceneExt::restoreCursor"); }
+	void saveHistory() { warning("TODO: SceneExt::saveHistory"); }
 };
 
 class Geekwad2Game: public Game {
@@ -70,6 +74,34 @@ public:
 		s.syncAsSint16LE(_v1);
 		s.syncAsSint16LE(_v2);
 	}
+};
+
+class SceneObjectB4: public SceneObject {
+public:
+	int _field8E, _field90, _field92;
+	Common::String _message;
+	int _resNum;
+	int _lineNum;
+	int _fontNumber;
+	int _fontFgColor;
+	int _fontBgColor;
+	int _fontFgColor2;
+	int _maxWidth;
+	TextAlign _textMode;
+	Rect _textBounds;
+public:
+	SceneObjectB4();
+	virtual void synchronize(Serializer &s);
+	virtual void draw();
+
+	void clear();
+	void setup(int visage, int strip, int frame, int xp, int yp, int priority, int v);
+};
+
+class Int6 {
+public:
+	Common::Point _pt;
+	int _v;
 };
 
 } // End of namespace Geekwad2

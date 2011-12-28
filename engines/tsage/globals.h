@@ -269,10 +269,21 @@ namespace Geekwad2 {
 
 class Geekwad2Globals: public Globals {
 public:
-	ASoundExt _sound1;
+	ASound _sound1, _sound2, _sound3, _sound4;
+	SpeakerGameText _gameTextSpeaker;
+
+	int _v470BC;
+	int _lockCombo[5];
+	int _lockDigits[5];
+	char _lockDisplay[5];
+public:
+	Geekwad2Globals();
+
+	virtual void reset();
+	virtual void synchronize(Serializer &s);
 };
 
-} // End of namespace Geekwad
+} // End of namespace Geekwad2
 
 } // End of namespace TsAGE
 

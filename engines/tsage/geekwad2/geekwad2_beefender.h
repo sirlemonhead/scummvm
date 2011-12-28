@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef TSAGE_GEEKWAD2_SCENES0_H
-#define TSAGE_GEEKWAD2_SCENES0_H
+#ifndef TSAGE_GEEKWAD2_BEEFENDER_H
+#define TSAGE_GEEKWAD2_BEEFENDER_H
 
 #include "common/scummsys.h"
 #include "tsage/converse.h"
@@ -39,59 +39,9 @@ namespace Geekwad2 {
 
 using namespace TsAGE;
 
+#define ARRAY_SIZE 5
+
 class Scene30: public Scene {
-	
-public:
-
-public:
-	virtual void postInit(SceneObjectList *OwnerList = NULL);
-};
-
-class Scene60: public SceneExt {
-	class Action1: public Action {
-	public:
-		virtual void signal();
-	};
-	class Action2: public Action {
-	public:
-		virtual void signal();
-	};
-public:
-	int _field30A, _field742, _field744, _field746;
-	int _lockCombo[5];
-	SpeakerCyb60 _cybSpeaker;
-	ASound _sound1, _sound2, _suond3, _sound4;
-	ASound _sound5, _sound6, _sound7;
-	SceneObject _object1, _object2, _object3;
-	SceneObject _object4, _object5, _object6;
-	Action1 _action1;
-	Action2 _action2;
-	SceneObjectB4 _object8;
-	Int6 _list1[7];
-	SceneObjectB4 _list2[5];
-	SceneObjectB4 _list3[5];
-
-	Scene60();
-	virtual void postInit(SceneObjectList *OwnerList = NULL);
-	virtual void remove();
-};
-
-class Scene150: public Scene {
-	/* Actions */
-	class Action1 : public Action {
-	public:
-		virtual void signal();
-	};
-public:
-	Action1 _action1;
-	ScenePalette _scenePalette;
-	SceneObject _object1, _object2, _object3, _object4;
-	SceneObject _object5, _object6, _object7, _object8;
-
-	virtual void postInit(SceneObjectList *OwnerList = NULL);
-};
-
-class Scene200: public Scene {
 	/* Actions */
 	class Action1: public Action {
 	public:
@@ -101,19 +51,73 @@ class Scene200: public Scene {
 	public:
 		virtual void signal();
 	};
-public:
-	Action1 _action1;
-	Action2 _action2;
-	ASound _sound1, _sound2;
-	SceneObject _object1, _object2, _object3, _object4;
-	int _field846, _field848;
-	int _fieldAB2, _fieldAB4, _creditIndex;
-	SynchronizedList<SceneText *> _list1;
-	SynchronizedList<SceneObject2 *> _list2;
+	class Action3: public Action {
+	public:
+		virtual void signal();
+	};
+	class Action4: public Action {
+	public:
+		virtual void signal();
+	};
+	class Action5: public Action {
+	public:
+		virtual void signal();
+	};
+	class Action6: public Action {
+	public:
+		virtual void signal();
+	};
+	class Action7: public Action {
+	public:
+		virtual void signal();
+	};
 
-	Scene200();
+	/* Objects */
+	class Object2: public SceneObject {
+	public:
+		SceneObject _object;
+	};
+	class Object3: public SceneObject {
+	public:
+		SceneObject _object;
+	};
+	class Object4: public SceneObject {
+	public:
+		SceneObject _object;
+	};
+public:
+	int _field30A, _field318, _field31A, _field31C, _field31E;
+	int _field1090[ARRAY_SIZE];
+	int _field1694[ARRAY_SIZE];
+	int _field1B6C[3];
+	int _field1996[ARRAY_SIZE];
+	Rect _rect1, _rect2;
+	Action1 _action1;
+	SpeakerSaddam _saddamSpeaker;
+	Action2 _action2;
+	Action3 _action3;
+	SceneObject _object1, _object2;
+	SceneObject _object3, _object4, _object5;
+	Object2 _objectList1[ARRAY_SIZE];
+	Object3 _objectList2[ARRAY_SIZE];
+	Object4 _objectList3[ARRAY_SIZE], _objectList4[ARRAY_SIZE];
+	Action2 _actionList1[ARRAY_SIZE];
+	SceneObject _objectList5[ARRAY_SIZE];
+	Action3 _actionList2[ARRAY_SIZE];
+	SceneObjectB4 _object6, _object7, _object8, _object9;
+	SceneObjectB4 _object10, _object11, _object12, _object13;
+	SceneObjectB4 _object14, _object15, _object16;
+	ASound _sound1, _sound2, _sound3, _sound4, _sound5, _sound6;
+	ASound _sound7, _sound8, _sound9, _sound10, _sound11, _sound12;
+	ASound _sound13, _sound14, _sound15, _sound16;
+	ASound _soundList1[ARRAY_SIZE];
+	Action6 _action6;
+	Action7 _action7;
+public:
+	Scene30();
+
 	virtual void postInit(SceneObjectList *OwnerList = NULL);
-	virtual void process(Event &event);
+	virtual void synchronize(Serializer &s);
 };
 
 } // End of namespace Geekwad2

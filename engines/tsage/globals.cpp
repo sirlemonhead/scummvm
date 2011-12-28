@@ -406,4 +406,32 @@ void Ringworld2Globals::synchronize(Serializer &s) {
 
 } // end of namespace Ringworld2
 
+/*--------------------------------------------------------------------------*/
+
+namespace Geekwad2 {
+
+Geekwad2Globals::Geekwad2Globals(): Globals() {
+}
+
+void Geekwad2Globals::synchronize(Serializer &s) {
+	Globals::synchronize(s);
+
+	s.syncAsSint16LE(_v470BC);
+	for (int idx = 0; idx < 5; ++idx)
+		s.syncAsSint16LE(_lockCombo[idx]);
+	for (int idx = 0; idx < 5; ++idx)
+		s.syncAsSint16LE(_lockDigits[idx]);
+	for (int idx = 0; idx < 5; ++idx)
+		s.syncAsSint16LE(_lockDisplay[idx]);
+}
+
+void Geekwad2Globals::reset() {
+	_v470BC = 0;
+	Common::set_to(&_lockCombo[0], &_lockCombo[5], 0);
+	Common::set_to(&_lockDigits[0], &_lockDigits[5], 0);
+	Common::set_to(&_lockDisplay[0], &_lockDisplay[5], 0);
+}
+
+} // end of namespace Geekwad2
+
 } // end of namespace TsAGE
