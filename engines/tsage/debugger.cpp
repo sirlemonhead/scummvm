@@ -707,4 +707,21 @@ bool Ringworld2Debugger::Cmd_MoveObject(int argc, const char **argv) {
 
 	return true;
 }
+
+/**
+ * This command lists the objects available, and their ID
+ */
+bool Geekwad2Debugger::Cmd_ListObjects(int argc, const char **argv) {
+	DebugPrintf("%s not supported in this engine\n", argv[0]);
+	return true;
+}
+
+/**
+ * This command handles moving an object
+ */
+bool Geekwad2Debugger::Cmd_MoveObject(int argc, const char **argv) {
+	DebugPrintf("%s not supported in this engine\n", argv[0]);
+	return true;
+}
+
 } // End of namespace TsAGE

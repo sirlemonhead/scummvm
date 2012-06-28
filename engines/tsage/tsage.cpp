@@ -46,6 +46,8 @@ TSageEngine::TSageEngine(OSystem *system, const tSageGameDescription *gameDesc) 
 		_debugger = new BlueForceDebugger();
 	else if (g_vm->getGameID() == GType_Ringworld2)
 		_debugger = new Ringworld2Debugger();	
+	else if (g_vm->getGameID() == GType_Geekwad2)
+		_debugger = new Geekwad2Debugger();
 }
 
 Common::Error TSageEngine::init() {
@@ -107,6 +109,12 @@ void TSageEngine::initialize() {
 
 		// Reset all global variables
 		R2_GLOBALS.reset();
+	} else if (g_vm->getGameID() == GType_Geekwad2) {
+		g_resourceManager->addLib("GEEKWAD.RLB");
+		g_globals = new Geekwad2::Geekwad2Globals();
+
+		// Reset all global variables
+		GW2_GLOBALS.reset();
 	}		
 
 	g_globals->gfxManager().setDefaults();

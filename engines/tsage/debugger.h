@@ -71,6 +71,12 @@ protected:
 	virtual bool Cmd_MoveObject(int argc, const char **argv);
 };
 
+class Geekwad2Debugger : public Debugger {
+protected:
+	virtual bool Cmd_ListObjects(int argc, const char **argv);
+	virtual bool Cmd_MoveObject(int argc, const char **argv);
+};
+
 } // End of namespace TsAGE
 
 #endif
