@@ -571,4 +571,18 @@ void Ringworld2Globals::synchronize(Serializer &s) {
 
 } // end of namespace Ringworld2
 
+/*--------------------------------------------------------------------------*/
+
+namespace Geekwad2 {
+
+void Geekwad2Globals::reset() {
+	_v4708C = 0;	
+}
+
+void Geekwad2Globals::synchronize(Serializer &s) {
+
+}
+
+} // end of namespace Geekwad2
+
 } // end of namespace TsAGE

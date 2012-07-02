@@ -30,6 +30,57 @@ namespace TsAGE {
 namespace Geekwad2 {
 
 /*--------------------------------------------------------------------------
+ * Scene 10 - Spaced Solicitors
+ *
+ *--------------------------------------------------------------------------*/
+
+void Scene10::Action1::signal() {
+	Scene10 *scene = (Scene10 *)GW2_GLOBALS._sceneManager._scene;
+
+	if (scene->_fieldEB2 == 1) {
+		scene->_object3.remove();
+		scene->_fieldEB2 = 0;
+
+		switch (_actionIndex++) {
+		case 0:
+			GW2_GLOBALS._v4708C = 1;
+			scene->_object2.hide();
+			scene->_objectP->setAction(NULL);
+			scene->_objectP->addMover(NULL);
+			break;
+		}
+	}
+}
+
+void Scene10::Action2::signal() {
+
+}
+
+void Scene10::Action3::signal() {
+
+}
+
+void Scene10::Action4::signal() {
+
+}
+
+void Scene10::Action5::signal() {
+
+}
+
+void Scene10::Action6::signal() {
+
+}
+
+void Scene10::Action7::signal() {
+
+}
+
+void Scene10::Action8::signal() {
+
+}
+
+/*--------------------------------------------------------------------------
  * Scene 150 - Tsunami Title Screen
  *
  *--------------------------------------------------------------------------*/

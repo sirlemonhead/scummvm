@@ -317,6 +317,10 @@ namespace Geekwad2 {
 class Geekwad2Globals: public Globals {
 public:
 	ASoundExt _sound1;
+	int _v4708C;
+
+	virtual void reset();
+	virtual void synchronize(Serializer &s);
 };
 
 } // End of namespace Geekwad

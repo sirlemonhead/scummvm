@@ -38,6 +38,9 @@ void Geekwad2Game::start() {
 Scene *Geekwad2Game::createScene(int sceneNumber) {
 	switch (sceneNumber) {
 	/* Scene group #0 */
+	// Spaced Solicitors
+	case 10: return new Scene10();
+
 	// Tsunami title screen
 	case 150: return new Scene150();
 

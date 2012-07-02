@@ -20,59 +20,51 @@
  *
  */
 
-#ifndef TSAGE_GEEKWAD2_LOGIC_H
-#define TSAGE_GEEKWAD2_LOGIC_H
+#ifndef TSAGE_GEEKWAD2_SPEAKERS_H
+#define TSAGE_GEEKWAD2_SPEAKERS_H
 
 #include "common/scummsys.h"
+#include "tsage/converse.h"
 #include "tsage/events.h"
 #include "tsage/core.h"
 #include "tsage/scenes.h"
 #include "tsage/globals.h"
+#include "tsage/geekwad2/geekwad2_logic.h"
 
 namespace TsAGE {
 
 namespace Geekwad2 {
 
 using namespace TsAGE;
-
-class SceneFactory {
+/*
+class VisualSpeaker : public Speaker {
 public:
-	static Scene *createScene(int sceneNumber);
+	SceneActor _object1;
+	SceneObject *_object2;
+	int _fieldF6, _fieldF8;
+	int _displayMode;
+	int _soundId;
+	int _delayAmount;
+	bool _removeObject;
+	int _frameNumber;
+	int _numFrames;
+private:
+	void setFrame(int numFrames);
+public:
+	VisualSpeaker();
+
+	virtual Common::String getClassName() { return "VisualSpeaker"; }
+	virtual void synchronize(Serializer &s);
+	virtual void remove();
+	virtual void setText(const Common::String &msg);
+	virtual void proc15() {}
+	virtual void proc16();
+
+	void setDelay(int delay);
 };
+*/
 
-class SceneExt: public Scene {
-public:
-public:
-	SceneExt();
-
-	virtual Common::String getClassName() { return "SceneExt"; }
-};
-
-class Geekwad2Game: public Game {
-public:
-	virtual void start();
-
-	virtual Scene *createScene(int sceneNumber);
-	virtual void processEvent(Event &event);
-	virtual void rightClick();
-	virtual bool canSaveGameStateCurrently();
-	virtual bool canLoadGameStateCurrently();
-};
-
-class SceneObject2: public SceneObject {
-public:
-	int _v1, _v2;
-
-	SceneObject2() { _v1 = _v2 = 0; }
-	virtual Common::String getClassName() { return "SceneObject2"; }
-	virtual void synchronize(Serializer &s) {
-		SceneObject::synchronize(s);
-		s.syncAsSint16LE(_v1);
-		s.syncAsSint16LE(_v2);
-	}
-};
-
-class SceneObjectB4: public SceneObject {
+class SpeakerGran : public Speaker {
 };
 
 } // End of namespace Geekwad2

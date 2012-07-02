@@ -20,63 +20,19 @@
  *
  */
 
-#ifndef TSAGE_GEEKWAD2_LOGIC_H
-#define TSAGE_GEEKWAD2_LOGIC_H
-
-#include "common/scummsys.h"
-#include "tsage/events.h"
-#include "tsage/core.h"
+#include "tsage/geekwad2/geekwad2_speakers.h"
+#include "tsage/geekwad2/geekwad2_scenes0.h"
 #include "tsage/scenes.h"
-#include "tsage/globals.h"
+#include "tsage/tsage.h"
+#include "tsage/graphics.h"
+#include "tsage/staticres.h"
 
 namespace TsAGE {
 
 namespace Geekwad2 {
 
-using namespace TsAGE;
 
-class SceneFactory {
-public:
-	static Scene *createScene(int sceneNumber);
-};
-
-class SceneExt: public Scene {
-public:
-public:
-	SceneExt();
-
-	virtual Common::String getClassName() { return "SceneExt"; }
-};
-
-class Geekwad2Game: public Game {
-public:
-	virtual void start();
-
-	virtual Scene *createScene(int sceneNumber);
-	virtual void processEvent(Event &event);
-	virtual void rightClick();
-	virtual bool canSaveGameStateCurrently();
-	virtual bool canLoadGameStateCurrently();
-};
-
-class SceneObject2: public SceneObject {
-public:
-	int _v1, _v2;
-
-	SceneObject2() { _v1 = _v2 = 0; }
-	virtual Common::String getClassName() { return "SceneObject2"; }
-	virtual void synchronize(Serializer &s) {
-		SceneObject::synchronize(s);
-		s.syncAsSint16LE(_v1);
-		s.syncAsSint16LE(_v2);
-	}
-};
-
-class SceneObjectB4: public SceneObject {
-};
 
 } // End of namespace Geekwad2
 
 } // End of namespace TsAGE
-
-#endif
