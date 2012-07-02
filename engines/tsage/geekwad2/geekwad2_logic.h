@@ -72,7 +72,28 @@ public:
 	}
 };
 
-class SceneObjectB4: public SceneObject {
+class BackgroundTextualObject: public BackgroundSceneObject {
+private:
+	Common::String _message;
+	Rect _textBounds;
+	int _field8E, _field90, _field92;
+	int _resNum, _lineNum;
+	int _fontNumber;
+	int _fontFgColour;
+	int _fontBgColour;
+	int _fontFgColour2;
+	int _maxWidth;
+	TextAlign _textMode;
+public:
+	BackgroundTextualObject();
+
+	virtual void remove();
+	virtual void removeObject();
+	virtual void reposition();
+	virtual void draw();
+	virtual void updateScreen();
+
+	void clear();
 };
 
 } // End of namespace Geekwad2

@@ -91,8 +91,8 @@ public:
 	Action6 _action6;
 	Action7 _actionList1[16];
 	Action8 _actionList2[16];
-	SceneObjectB4 _obj1, _obj2, _obj3, _obj4;
-	SceneObjectB4 _obj5, _obj6, _obj7;
+	BackgroundTextualObject _obj1, _obj2, _obj3, _obj4;
+	BackgroundTextualObject _obj5, _obj6, _obj7;
 	ASound _sound3, _sound4, _sound5, _sound6;
 	ASound _sound7;
 	Action3 _action3;

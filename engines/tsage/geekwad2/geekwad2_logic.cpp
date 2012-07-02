@@ -78,6 +78,130 @@ void Geekwad2Game::processEvent(Event &event) {
 SceneExt::SceneExt(): Scene() {
 }
 
+/*--------------------------------------------------------------------------*/
+
+BackgroundTextualObject::BackgroundTextualObject() {
+	_field8E = _field90 = _field92 = 0;
+	_resNum = _lineNum = 0;
+	_fontFgColour = _fontBgColour = _fontFgColour2 = 0;
+	_maxWidth = 0;
+}
+
+void BackgroundTextualObject::remove() {
+	updateScreen();
+	removeObject();
+}
+
+void BackgroundTextualObject::removeObject() {
+	GW2_GLOBALS._sceneItems.remove(this);
+
+	if (GW2_GLOBALS._sceneManager._scene->_bgSceneObjects.contains(this))
+		GW2_GLOBALS._sceneManager._scene->_bgSceneObjects.remove(this);
+
+	clear();
+
+	if (_flags & OBJFLAG_CLONED) 
+		destroy();
+}
+
+void BackgroundTextualObject::reposition() {
+	if (!_message.empty() || _resNum != -1 || _field90) {
+		_bounds = _textBounds;
+	} else {
+		SceneObject::reposition();
+	}
+
+	_xs = _bounds.left;
+	_xe = _bounds.right;
+}
+
+void BackgroundTextualObject::draw() {
+	if (!_message.empty() || (_resNum != -1)) {
+		GfxFontBackup font;
+		GfxManager &gfxManager = g_globals->gfxManager();
+		gfxManager._font.setFontNumber(this->_fontNumber);
+
+		if (_resNum == -1) {
+			gfxManager.getStringBounds(_message.c_str(), _textBounds, _maxWidth);
+		} else {
+			Common::String msg = g_resourceManager->getMessage(_resNum, _lineNum);
+			gfxManager.getStringBounds(msg.c_str(), _textBounds, _maxWidth);
+		}
+
+		if (_textMode == ALIGN_CENTER) {
+			_textBounds.center(_position.x, _position.y);
+		} else {
+			_textBounds.moveTo(_position.x, _position.y);
+		}
+	} else if (!_field90) {
+		reposition();
+		_textBounds = _bounds;
+	}
+
+	_textBounds.expandPanes();
+
+	if (_field8E) {
+		_textBounds.translate(-GW2_GLOBALS._sceneOffset.x, -GW2_GLOBALS._sceneOffset.y);
+		SceneObject::draw();
+		_textBounds.translate(GW2_GLOBALS._sceneOffset.x, GW2_GLOBALS._sceneOffset.y);
+	}
+
+	if (!_message.empty() || _resNum != -1 || (_field90 && _field92)) {
+		_textBounds.translate(-GW2_GLOBALS._sceneOffset.x, -GW2_GLOBALS._sceneOffset.y);
+		
+		if (!_field90) {
+			GfxFontBackup font;
+			GfxManager &gfxManager = g_globals->gfxManager();
+			gfxManager._font.setFontNumber(this->_fontNumber);
+
+			gfxManager.setFillFlag(false);
+			gfxManager._font._colors.foreground = _fontFgColour;
+			gfxManager._font._colors2.background = _fontBgColour;
+			gfxManager._font._colors2.foreground = _fontFgColour2;
+
+			if (_resNum == -1) {
+				gfxManager._font.writeLines(_message.c_str(), _textBounds, _textMode);
+			} else {
+				Common::String msg = g_resourceManager->getMessage(_resNum, _lineNum);
+				gfxManager._font.writeLines(msg.c_str(), _textBounds, _textMode);
+			}
+
+			if (_textMode == ALIGN_CENTER) {
+				_textBounds.center(_position.x, _position.y);
+			} else {
+				_textBounds.moveTo(_position.x, _position.y);
+			}
+		} else {
+			reposition();
+		}
+
+		_textBounds.translate(GW2_GLOBALS._sceneOffset.x, GW2_GLOBALS._sceneOffset.y);
+		reposition();
+	} else if (!_field90 || _field92) {
+		BackgroundSceneObject::draw();
+	}
+}
+
+void BackgroundTextualObject::updateScreen() {
+	_textBounds.translate(-GW2_GLOBALS._sceneOffset.x, -GW2_GLOBALS._sceneOffset.y);
+	SceneObject::updateScreen();
+	_textBounds.translate(GW2_GLOBALS._sceneOffset.x, GW2_GLOBALS._sceneOffset.y);
+
+	if (GW2_GLOBALS._sceneManager._scene->_bgSceneObjects.contains(this))
+		GW2_GLOBALS._sceneManager._scene->_bgSceneObjects.remove(this);
+
+	clear();
+}
+
+void BackgroundTextualObject::clear() {
+	_field8E = _field90 = 0;
+	_field92 = 1;
+	_message.clear();
+	_resNum = -1;
+	_lineNum = 0;
+	_textMode = ALIGN_LEFT;
+}
+
 } // End of namespace Geekwad2
 
 } // End of namespace TsAGE
