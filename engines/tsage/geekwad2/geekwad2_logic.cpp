@@ -81,10 +81,7 @@ SceneExt::SceneExt(): Scene() {
 /*--------------------------------------------------------------------------*/
 
 BackgroundTextualObject::BackgroundTextualObject() {
-	_field8E = _field90 = _field92 = 0;
-	_resNum = _lineNum = 0;
-	_fontFgColour = _fontBgColour = _fontFgColour2 = 0;
-	_maxWidth = 0;
+	clear();
 }
 
 void BackgroundTextualObject::remove() {

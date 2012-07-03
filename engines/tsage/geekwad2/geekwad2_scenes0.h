@@ -79,37 +79,44 @@ class Scene10: public Scene {
 	};
 
 public:
+	int _field30A, _field30C;
+	Rect _bounds;
+	StripCallback *_stripCallback;
+	int _field31E;
+	SpeakerGran _granSpeaker;
 	Action1 _action1;
 	Action2 _action2;
-	SpeakerGran _granSpeaker;
+	int _field772;
 	ASound _sound1, _sound2;
 	SceneObject _object1, _object2, _object3, _object4;
-	Rect _rect1, _rect2;
-	SceneObject _object5;
-	Object _objList1[5];
-	Object _objList2[16];
-	Action6 _action6;
-	Action7 _actionList1[16];
-	Action8 _actionList2[16];
-	BackgroundTextualObject _obj1, _obj2, _obj3, _obj4;
-	BackgroundTextualObject _obj5, _obj6, _obj7;
-	ASound _sound3, _sound4, _sound5, _sound6;
-	ASound _sound7;
-	Action3 _action3;
-	Action4 _action4[5];
-	Action5 _action5;
-	SceneObject *objectP;
-	int _field30A, _field30C;
-	Common::Rect _bounds;
-	uint32 _frameNumber;
-	SceneObject *_objectP;
-	int _field31E;
-	int _field772;
 	int _fieldEB0, _fieldEB2, _fieldEB4, _fieldEB6, _fieldEB8;
 	int _fieldEBA, _fieldEBC, _fieldEBE, _fieldEC0;
 	int _fieldEC2, _fieldEC4, _fieldEC6, _fieldEC8;
 	int _fieldECA, _fieldECC;
-	
+	Rect _rect1, _rect2;
+	SceneObject _object5;
+	int _fieldF74;
+
+	SceneObject *_objectP;
+	Object _objList1[5];
+	int _field127A[20];
+	int _field128E[16];
+	Object _objList2[16];
+	int _field1C2E[64];
+
+	Action6 _action6;
+	Action7 _actionList1[16];
+	Action8 _actionList2[16];
+	int _field200A[26];
+
+	BackgroundTextualObject _obj1, _obj2, _obj3, _obj4;
+	BackgroundTextualObject _obj5, _obj6, _obj7;
+	ASound _sound3, _sound4, _sound5;
+	ASound _sound6, _sound7;
+	int _field319A, _field319C;
+	Action3 _action3;
+	Action4 _action4[5];
+	Action5 _action5;
 };
 
 class Scene150: public Scene {

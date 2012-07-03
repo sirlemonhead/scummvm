@@ -47,21 +47,133 @@ void Scene10::Action1::signal() {
 			scene->_object2.hide();
 			scene->_objectP->setAction(NULL);
 			scene->_objectP->addMover(NULL);
+			scene->_field31E = 1;
+
+			switch (scene->_fieldEC0) {
+			case 0:
+				scene->_sound2.play(101, NULL, 100);
+				GW2_GLOBALS._soundManager.setMasterVol(100);
+				scene->_stripManager.start(100, this, scene->_stripCallback);
+				break;
+			case 1:
+				scene->_sound2.play(110, NULL, 100);
+				GW2_GLOBALS._soundManager.setMasterVol(100);
+				scene->_stripManager.start(130, this, scene->_stripCallback);
+				break;
+			case 2:
+				scene->_sound2.play(103, NULL, 90);
+				GW2_GLOBALS._soundManager.setMasterVol(100);
+				scene->_stripManager.start(150, this, scene->_stripCallback);
+				break;
+			case 3:
+				scene->_sound2.play(104, NULL, 100);
+				GW2_GLOBALS._soundManager.setMasterVol(100);
+				scene->_stripManager.start(170, this, scene->_stripCallback);
+				break;
+			case 4:
+				scene->_sound2.play(105, NULL, 100);
+				GW2_GLOBALS._soundManager.setMasterVol(100);
+				scene->_stripManager.start(190, this, scene->_stripCallback);
+				break;
+			case 5:
+				scene->_sound2.play(106, NULL, 100);
+				GW2_GLOBALS._soundManager.setMasterVol(100);
+				scene->_stripManager.start(210, this, scene->_stripCallback);
+				break;
+			default:
+				scene->_sound2.play(107, NULL, 100);
+				GW2_GLOBALS._soundManager.setMasterVol(100);
+				scene->_stripManager.start(230, this, scene->_stripCallback);
+				break;
+			}		
+
+		case 1:
+			scene->_field31E = 0;
+			scene->_object2.show();
+			setAction(&scene->_action5);
+			break;
+
+		default:
 			break;
 		}
 	}
 }
 
 void Scene10::Action2::signal() {
+	Scene10 *scene = (Scene10 *)GW2_GLOBALS._sceneManager._scene;
 
+	scene->_fieldEBC = 0;
+	if (scene->_fieldEB2 == 1) {
+		scene->_object3.remove();
+		scene->_fieldEB2 = 0;
+	}
+
+	switch (_actionIndex) {
+	case 0:
+		++_actionIndex;
+		GW2_GLOBALS._v4708C = 1;
+		scene->_field31E = 1;
+		scene->_sound2.stop();
+		//TODO
+
+	case 1:
+		++_actionIndex;
+		setDelay(1);
+		break;
+
+	// TODO:
+
+	default:
+		break;
+	}
 }
 
 void Scene10::Action3::signal() {
+	Scene10 *scene = (Scene10 *)GW2_GLOBALS._sceneManager._scene;
 
+	switch (_actionIndex++) {
+	case 0:
+		scene->_sound4.play(112, NULL);
+		scene->_object2._strip = 7;
+		scene->_object2._frame = 1;
+		scene->_object2._numFrames = 5;
+		scene->_object2.animate(ANIM_MODE_5, this);
+		break;
+	
+	case 1:
+		scene->_object2._numFrames = 10;
+		scene->_object2._strip = 3;
+		scene->_object2._frame = 1;
+		remove();
+		break;
+
+	default:
+		break;
+	}
 }
 
 void Scene10::Action4::signal() {
+	Scene10 *scene = (Scene10 *)GW2_GLOBALS._sceneManager._scene;
 
+	switch (_actionIndex++) {
+	case 0: {
+		BackgroundTextualObject *obj = (BackgroundTextualObject *)_owner;
+		obj->setVisage(150);
+		obj->_frame = 1;
+		obj->animate(ANIM_MODE_5, this);
+		break;
+	}
+
+	case 1: {
+		BackgroundTextualObject *obj = (BackgroundTextualObject *)_owner;
+		obj->remove();
+		scene->_field127A[obj->_field92];
+		break;
+	}
+
+	default:
+		break;
+	}
 }
 
 void Scene10::Action5::signal() {

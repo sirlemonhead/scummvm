@@ -73,7 +73,7 @@ public:
 };
 
 class BackgroundTextualObject: public BackgroundSceneObject {
-private:
+public:
 	Common::String _message;
 	Rect _textBounds;
 	int _field8E, _field90, _field92;
