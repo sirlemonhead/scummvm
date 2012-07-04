@@ -177,7 +177,156 @@ void Scene10::Action4::signal() {
 }
 
 void Scene10::Action5::signal() {
+	Scene10 *scene = (Scene10 *)GW2_GLOBALS._sceneManager._scene;
+	int strip, stripNum;
 
+	switch (_actionIndex++) {
+	case 0:
+		GW2_GLOBALS._v4708C = 0;
+		if (scene->_fieldEB2 == 1) {
+			scene->_object3.remove();
+			scene->_fieldEB2 = 0;
+		}
+		
+		scene->_fieldECC = 1;
+		if (scene->_fieldEC0 >= 6)
+			scene->_fieldEC4 = 1;
+
+		scene->_field319A -= 2;
+		if (scene->_field319A < 0)
+			scene->_field319A = 0;
+
+		scene->_fieldEB0 = 100;
+		if ((scene->_fieldEC2 + 5) >= 105) {
+			scene->_fieldEC2 = 105;
+		} else {
+			scene->_fieldEC2 += 5;
+		}
+
+		if ((scene->_fieldEC8 + 25) >= 600) {
+			scene->_fieldEC8 = 600;
+		} else {
+			scene->_fieldEC8 = 25;
+		}
+
+		if ((scene->_fieldECA - 1) > 0)
+			--scene->_fieldECA;
+		
+		for (int idx = 0; idx < 5; ++idx) {
+			if (scene->_field127A[idx]) {
+				scene->_field127A[idx]->remove();
+				scene->_field127A[idx] = NULL;
+			}
+		}
+
+		scene->_objectP->setVisage(110);
+		GW2_GLOBALS._soundManager.setMasterVol(100);
+
+		strip = 0;
+		stripNum = scene->_fieldEC0 / 2;
+		if (stripNum > 5) {
+			strip = 7;
+			scene->_objectP->setStrip(7);
+		} else {
+			switch (stripNum) {
+			case 0:
+				strip = 1;
+				break;
+			case 1:
+				strip = 4;
+				break;
+			case 2:
+				strip = 2;
+				break;
+			case 3:
+				strip = 5;
+				break;
+			case 4:
+				strip = 3;
+				break;
+			case 5:
+				strip = 6;
+				break;
+			default:
+				break;
+			}
+
+			scene->_objectP->setStrip(stripNum + 1);
+		}
+
+		scene->_obj2.remove();
+		scene->_obj2.setup(115, strip, 4, 250, 1, 130, 1);
+		scene->_obj2.draw();
+		
+		scene->_objectP->setFrame2(1);
+		scene->_objectP->setPosition(Common::Point(0, 23));
+		scene->_objectP->_field8E = 0;
+		scene->_objectP->show();
+		scene->_objectP->_moveDiff.x = 20;
+		ADD_MOVER((*scene->_objectP), 160, 23);
+		break;
+
+	case 1:
+		scene->_objectP->setFrame2(2);
+		setDelay(30);
+		break;
+
+	case 2:
+		scene->_objectP->setFrame2(1);
+		ADD_MOVER((*scene->_objectP), 350, 23);
+
+		for (int idx = scene->_fieldEB4; idx <= scene->_fieldEB6; ++idx) {
+			for (int idx2 = 0; idx2 < 4; ++idx2) {
+				BackgroundTextualObject *obj = scene->_field1C2E[idx2][idx];
+				obj->postInit();
+				scene->_field128E[idx2][idx] = 1;
+				obj->setVisage(140);
+				obj->animate(ANIM_MODE_2, NULL);
+
+				stripNum = scene->_fieldEC0 / 2;
+				strip = (stripNum <= 5) ? stripNum : GW2_GLOBALS._randomSource.getRandomNumber(5);
+				obj->setStrip(strip);
+				obj->setFrame(1);
+				obj->changeZoom(-1);
+				obj->fixPriority(100);
+				obj->setPosition(Common::Point(160, 23));
+				obj->_moveDiff = Common::Point(30, 30);
+				obj->_field90 = 0;
+				obj->setAction(NULL);
+			}
+		}
+		
+		ADD_MOVER_NULL((*scene->_field1C2E[0][0]), 60, 120);
+		ADD_MOVER_NULL((*scene->_field1C2E[0][1]), 60, 90);
+		ADD_MOVER_NULL((*scene->_field1C2E[0][2]), 60, 60);
+		ADD_MOVER_NULL((*scene->_field1C2E[0][3]), 60, 30);
+		ADD_MOVER_NULL((*scene->_field1C2E[1][0]), 130, 120);
+		ADD_MOVER_NULL((*scene->_field1C2E[1][1]), 130, 90);
+		ADD_MOVER_NULL((*scene->_field1C2E[1][2]), 130, 60);
+		ADD_MOVER_NULL((*scene->_field1C2E[1][3]), 130, 30);
+		ADD_MOVER_NULL((*scene->_field1C2E[2][0]), 190, 120);
+		ADD_MOVER_NULL((*scene->_field1C2E[2][1]), 190, 90);
+		ADD_MOVER_NULL((*scene->_field1C2E[2][2]), 190, 60);
+		ADD_MOVER_NULL((*scene->_field1C2E[2][3]), 190, 30);
+		ADD_MOVER_NULL((*scene->_field1C2E[3][0]), 260, 120);
+		ADD_MOVER_NULL((*scene->_field1C2E[3][1]), 260, 90);
+		ADD_MOVER_NULL((*scene->_field1C2E[3][2]), 260, 60);
+		ADD_MOVER_NULL((*scene->_field1C2E[3][3]), 260, 30);
+		
+		scene->_field319C = 16;
+		break;
+
+	case 3:
+		scene->_objectP->hide();
+		scene->_objectP->_field8E = 1;
+		scene->_field31E = 0;
+		scene->_fieldEBC = 1;
+		scene->_field772 = 0;
+		scene->_objectP->setAction(&scene->_action6);
+
+		remove();
+		break;
+	}
 }
 
 void Scene10::Action6::signal() {

@@ -97,12 +97,12 @@ public:
 	SceneObject _object5;
 	int _fieldF74;
 
-	SceneObject *_objectP;
+	BackgroundTextualObject *_objectP;
 	Object _objList1[5];
-	int _field127A[20];
-	int _field128E[16];
+	EventHandler *_field127A[5];
+	int _field128E[4][4];
 	Object _objList2[16];
-	int _field1C2E[64];
+	BackgroundTextualObject *_field1C2E[4][4];
 
 	Action6 _action6;
 	Action7 _actionList1[16];

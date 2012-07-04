@@ -93,6 +93,7 @@ public:
 	virtual void draw();
 	virtual void updateScreen();
 
+	void setup(int visage, int strip, int frame, int xp, int yp, int priority, int v8e);
 	void clear();
 };
 

@@ -190,6 +190,13 @@ void BackgroundTextualObject::updateScreen() {
 	clear();
 }
 
+void BackgroundTextualObject::setup(int visage, int strip, int frame, int xp, int yp, int priority, int v8e) {
+	if (GW2_GLOBALS._sceneManager._scene->_bgSceneObjects.contains(this))
+		GW2_GLOBALS._sceneManager._scene->_bgSceneObjects.remove(this);
+
+	SceneObject::setup(visage, strip, frame, xp, yp, priority);
+}
+
 void BackgroundTextualObject::clear() {
 	_field8E = _field90 = 0;
 	_field92 = 1;
