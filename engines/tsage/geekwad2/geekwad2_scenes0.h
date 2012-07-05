@@ -70,14 +70,16 @@ class Scene10: public Scene {
 		virtual void signal();
 	};
 	class Action8 : public Action {
-	public:
-		virtual void signal();
 	};
 
 	/* Objects */
 	class Object: public SceneObject {
-	};
+	public:
+		int _field8E, _field90, _field92;
+		int _field94, _field96;
+	public:
 
+	};
 public:
 	int _field30A, _field30C;
 	Rect _bounds;
@@ -99,7 +101,7 @@ public:
 
 	BackgroundTextualObject *_objectP;
 	Object _objList1[5];
-	EventHandler *_field127A[5];
+	Object *_field127A[5];
 	int _field128E[4][4];
 	Object _objList2[16];
 	BackgroundTextualObject *_field1C2E[4][4];

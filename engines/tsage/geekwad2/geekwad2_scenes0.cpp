@@ -330,15 +330,191 @@ void Scene10::Action5::signal() {
 }
 
 void Scene10::Action6::signal() {
+	Scene10 *scene = (Scene10 *)GW2_GLOBALS._sceneManager._scene;
 
+	switch (_actionIndex) {
+	case 0:
+		_actionIndex = 1;
+		setDelay(GW2_GLOBALS._randomSource.getRandomNumber(30 * scene->_fieldECA));
+		break;
+
+	case 1:
+		if (scene->_fieldEBC == 1) {
+			scene->_objectP->setVisage(110);
+			int v = scene->_fieldEC0 / 2;
+			scene->_objectP->setStrip((v <= 5) ? v + 1 : 7);
+			scene->_objectP->_field8E = 0;
+			scene->_objectP->_moveDiff.x = 4;
+			scene->_objectP->show();
+
+			_actionIndex = 2;
+			if (GW2_GLOBALS._randomSource.getRandomNumber(1) == 1) {
+				scene->_objectP->setPosition(Common::Point(330, 23));
+				scene->_objectP->setFrame2(3);
+			} else {
+				scene->_objectP->setPosition(Common::Point(0, 23));
+				scene->_objectP->setFrame2(1);
+			}
+			ADD_MOVER((*scene->_objectP), 160, 23);
+		} else {
+			setDelay(1);
+		}
+		break;
+
+	case 2:
+		if ((scene->_field319C > 0) && (scene->_fieldEBC == 1) && (scene->_objectP->_field8E == 0) &&
+				(scene->_fieldEC4 == 1)) {
+			bool flag = false;
+			int idx;
+			for (idx = 0; idx < 4; ++idx) {
+				if (!scene->_field128E[0][0] && !scene->_field128E[1][0] &&
+					!scene->_field128E[2][0] && !scene->_field128E[3][0]) {
+					flag = true;
+					break;
+				}
+			}
+
+			if (flag && !scene->_field1C2E[0][idx] && !scene->_field1C2E[1][idx] 
+					&& !scene->_field1C2E[2][idx] && !scene->_field1C2E[3][idx]) {
+				// Increment frame					
+				scene->_objectP->setFrame2(scene->_objectP->_frame + 1);
+
+				// Loop
+				for (int idx = scene->_fieldEB4; idx <= scene->_fieldEB6; ++idx) {
+					for (int idx2 = 0; idx2 < 4; ++idx) {
+						BackgroundTextualObject *obj = scene->_field1C2E[idx][idx2];
+
+						if (scene->_field128E[idx][idx2] && obj->_position.y < 170) {
+							scene->_field128E[idx][idx2] = 1;
+
+							obj->postInit();
+							obj->setVisage(140);
+							obj->animate(ANIM_MODE_2, NULL);
+							
+							int strip = scene->_fieldEC0 / 2;
+							obj->setStrip((strip <= 5) ? strip : GW2_GLOBALS._randomSource.getRandomNumber(5));
+
+							obj->setFrame(1);
+							obj->changeZoom(-1);
+							obj->fixPriority(100);
+							obj->setPosition(Common::Point(obj->_position.x, 23));
+							obj->_moveDiff = Common::Point(30, 30);
+							obj->_field90 = 0;
+							obj->setAction(NULL);
+							obj->reposition();
+
+							int v = 0; // TODO: Decode floating point logic here
+							if (v) {
+								GW2_GLOBALS._soundManager.setMasterVol(GW2_GLOBALS._soundManager.getMasterVol() - 20);
+							}
+
+							break;
+						}
+					}
+				}
+			}	
+
+			setDelay(1);
+			_actionIndex = 3;
+		}
+		break;
+
+	case 3:
+		if (scene->_fieldEBC == 1) {
+			switch (scene->_objectP->_frame) {
+			case 1:
+			case 2:
+				scene->_objectP->setFrame2(1);
+				ADD_MOVER((*scene->_objectP), 340, 23);
+				break;
+			case 3:
+			case 4:
+				scene->_objectP->setFrame2(3);
+				ADD_MOVER((*scene->_objectP), 0, 23);
+				break;
+			default:
+				break;
+			}		
+		} else {
+			setDelay(1);
+		}
+		break;
+
+	case 4:
+		if (scene->_fieldEBC == 1) {
+			scene->_objectP->hide();
+			scene->_objectP->_field8E = 1;
+		}
+
+		_actionIndex = 0;
+		setDelay(1);
+		break;
+
+	default:
+		break;
+	}
 }
 
 void Scene10::Action7::signal() {
+	Scene10 *scene = (Scene10 *)GW2_GLOBALS._sceneManager._scene;
 
-}
+	switch (_actionIndex) {
+	case 0:
+		setDelay(GW2_GLOBALS._randomSource.getRandomNumber(240));
+		break;
 
-void Scene10::Action8::signal() {
+	case 1: {
+		SceneObject *obj = static_cast<SceneObject *>(_owner);
+		obj->setVisage(130);
+		obj->_frame = 1;
+		obj->animate(ANIM_MODE_NONE, NULL);
+		
+		_actionIndex = 2;
+		setDelay(60);
+		break;
+	}
 
+	case 2: {
+		for (int idx = 0; idx < 4; ++idx) {
+			if (!scene->_field127A[idx]	&& GW2_GLOBALS._sceneObjects->contains(scene->_field127A[idx])) {
+				SceneObject *owner = static_cast<SceneObject *>(_owner);
+				Object *obj = scene->_field127A[idx] = &scene->_objList1[idx];
+				obj->postInit();
+				obj->setVisage(120);
+				obj->setStrip(owner->_strip);
+				obj->setFrame(1);
+				obj->fixPriority(250);
+				obj->changeZoom(10);
+
+				obj->_field92 = idx;
+				obj->setAction(NULL);
+				obj->setPosition(Common::Point(owner->_position.x + 5, owner->_position.y - 10));
+				obj->animate(ANIM_MODE_2, NULL);
+				
+				owner->_frame = 2;
+				break;
+			}
+		}
+
+		_actionIndex = 3;
+		setDelay(60);
+		break;
+	}
+
+	case 3: {
+		SceneObject *owner = static_cast<SceneObject *>(_owner);
+		owner->setVisage(140);
+		owner->_frame = 1;
+		owner->animate(ANIM_MODE_2, NULL);
+		
+		_actionIndex = 0;
+		setDelay(1);
+		break;
+	}
+
+	default:
+		break;
+	}
 }
 
 /*--------------------------------------------------------------------------
