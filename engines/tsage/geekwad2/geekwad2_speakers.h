@@ -36,35 +36,51 @@ namespace TsAGE {
 namespace Geekwad2 {
 
 using namespace TsAGE;
-/*
-class VisualSpeaker : public Speaker {
+
+class VisualSpeaker: public Speaker {
+	class Action1: public Action {
+	public:
+		void signal();
+	};
+
+	class Action2: public Action {
+	public:
+		void signal();
+	};
+
+	class Object1: public SceneObject {
+	public:
+		int _v;
+
+		Object1() { _v = 0; }
+		virtual void synchronize(Serializer &s);
+	};
 public:
-	SceneActor _object1;
-	SceneObject *_object2;
-	int _fieldF6, _fieldF8;
-	int _displayMode;
-	int _soundId;
-	int _delayAmount;
-	bool _removeObject;
-	int _frameNumber;
+	Object1 _object1;
+	SceneObject _object2, _object3;
+	SceneObject _object4, _object5;
+	bool _removeObject1, _removeObject2, _removeObject3;
+	bool _removeObject4, _removeObject5;
+	Action1 _action1, _action2;
+	Action2 _action3;
 	int _numFrames;
-private:
-	void setFrame(int numFrames);
+	Common::Point _offsetPos;
 public:
 	VisualSpeaker();
 
 	virtual Common::String getClassName() { return "VisualSpeaker"; }
 	virtual void synchronize(Serializer &s);
 	virtual void remove();
+	virtual void proc12(Action *action);
 	virtual void setText(const Common::String &msg);
-	virtual void proc15() {}
-	virtual void proc16();
-
-	void setDelay(int delay);
 };
-*/
 
-class SpeakerGran : public Speaker {
+class SpeakerGran : public VisualSpeaker {
+public:
+	SpeakerGran();
+
+	virtual void proc12(Action *action);
+	virtual void setText(const Common::String &msg);
 };
 
 } // End of namespace Geekwad2

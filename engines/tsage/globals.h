@@ -318,6 +318,7 @@ class Geekwad2Globals: public Globals {
 public:
 	ASoundExt _sound1;
 	int _v4708C;
+	int _v492C6;
 
 	virtual void reset();
 	virtual void synchronize(Serializer &s);
