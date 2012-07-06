@@ -517,6 +517,88 @@ void Scene10::Action7::signal() {
 	}
 }
 
+/*--------------------------------------------------------------------------*/
+
+Scene10::Scene10(): Scene() {
+	_field30A = 0;
+	_stripCallback = NULL;
+	_field30C = 0;
+	_field772 = 0;
+}
+
+void Scene10::postInit(SceneObjectList *OwnerList) {
+	Scene::postInit();
+
+}
+
+void Scene10::reset() {
+	_field31E = 1;
+	_fieldEC0 = -1;
+	_fieldEBC = 0;
+	_fieldECC = 1;
+	_field319A = 20;
+	_fieldEC2 = 10;
+	_fieldEC4 = 0;
+	_fieldEC6 = 3;
+
+	_field2022 = 0;
+	_fieldEC8 = 100;
+	_fieldECA = 20;
+	_field319C = 0;
+	_score = 0;
+	
+	setupScore();
+
+	_obj3.remove();
+	_obj3.setup(100, 6, 4, 40, 13, 130, 1);
+	_obj3.draw();
+
+	_obj4.remove();
+	_obj4.setup(100, 6, 4, 50, 13, 130, 1);
+	_obj4.draw();
+
+	_obj5.remove();
+	_obj6.remove();
+	_obj7.remove();
+	_obj2.remove();
+
+	setupAction();
+}
+
+void Scene10::setupScore() {
+	if (_score) {
+		_numberBuffer = Common::String::format("%ld", _score);
+	} else {
+		_numberBuffer = "0";
+	}
+
+	if (_bgSceneObjects.contains(&_obj1))
+		_bgSceneObjects.remove(&_obj1);
+
+	_obj1._maxWidth = 180;
+	_obj1._fontNumber = 11;
+	_obj1._fontFgColour = GW2_GLOBALS._scenePalette._colors.background;
+	_obj1._fontBgColour = GW2_GLOBALS._scenePalette._colors.background;
+	_obj1._fontFgColour2 = 0;
+	_obj1._textMode = ALIGN_CENTER;
+	_obj1._message = _numberBuffer;
+	_obj1.setup(0, 0, 0, 157, 15, 156, 1);
+	_obj1.draw();
+}
+
+void Scene10::setupAction() {
+	++_fieldEC0;
+	if (_fieldEB2 == 1) {
+		_object3.remove();
+		_fieldEB2 = 0;
+	}
+
+	if ((_fieldEC0 % 2) == 0)
+		setAction(&_action1);
+	else
+		setAction(&_action5);	
+}
+
 /*--------------------------------------------------------------------------
  * Scene 150 - Tsunami Title Screen
  *

@@ -80,6 +80,10 @@ class Scene10: public Scene {
 	public:
 
 	};
+private:
+	void reset();
+	void setupScore();
+	void setupAction();
 public:
 	int _field30A, _field30C;
 	Rect _bounds;
@@ -109,7 +113,9 @@ public:
 	Action6 _action6;
 	Action7 _actionList1[16];
 	Action8 _actionList2[16];
-	int _field200A[26];
+	Common::String _numberBuffer;
+	int _score;
+	int _field2022;
 
 	BackgroundTextualObject _obj1, _obj2, _obj3, _obj4;
 	BackgroundTextualObject _obj5, _obj6, _obj7;
@@ -119,6 +125,10 @@ public:
 	Action3 _action3;
 	Action4 _action4[5];
 	Action5 _action5;
+public:
+	Scene10();
+
+	virtual void postInit(SceneObjectList *OwnerList = NULL);
 };
 
 class Scene150: public Scene {
