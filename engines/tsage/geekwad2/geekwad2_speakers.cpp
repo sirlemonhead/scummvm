@@ -178,6 +178,14 @@ void VisualSpeaker::Object1::synchronize(Serializer &s) {
 
 /*--------------------------------------------------------------------------*/
 
+SpeakerGameText::SpeakerGameText(): VisualSpeaker() {
+	_speakerName = "GAMETEXT";
+	_color1 = 8;
+	_color2 = 19;
+}
+
+/*--------------------------------------------------------------------------*/
+
 SpeakerGran::SpeakerGran(): VisualSpeaker() {
 	_fontNumber = 31;
 	_color1 = 23;

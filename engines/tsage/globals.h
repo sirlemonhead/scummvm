@@ -316,6 +316,7 @@ namespace Geekwad2 {
 
 class Geekwad2Globals: public Globals {
 public:
+	SpeakerGameText _gameTextSpeaker;
 	ASoundExt _sound1;
 	int _v4708C;
 	int _v492C6;

@@ -277,7 +277,7 @@ void Scene10::Action5::signal() {
 
 		for (int idx = scene->_fieldEB4; idx <= scene->_fieldEB6; ++idx) {
 			for (int idx2 = 0; idx2 < 4; ++idx2) {
-				BackgroundTextualObject *obj = scene->_field1C2E[idx2][idx];
+				Object *obj = scene->_field1C2E[idx2][idx];
 				obj->postInit();
 				scene->_field128E[idx2][idx] = 1;
 				obj->setVisage(140);
@@ -382,7 +382,7 @@ void Scene10::Action6::signal() {
 				// Loop
 				for (int idx = scene->_fieldEB4; idx <= scene->_fieldEB6; ++idx) {
 					for (int idx2 = 0; idx2 < 4; ++idx) {
-						BackgroundTextualObject *obj = scene->_field1C2E[idx][idx2];
+						Object *obj = scene->_field1C2E[idx][idx2];
 
 						if (scene->_field128E[idx][idx2] && obj->_position.y < 170) {
 							scene->_field128E[idx][idx2] = 1;
@@ -528,6 +528,18 @@ Scene10::Scene10(): Scene() {
 	_fieldEB4 = 3;
 	_fieldEB6  = 0;
  
+	for (int idx = _fieldEB6; idx < _fieldEB4; ++idx) {
+		for (int idx2 = 0; idx2 < 4; ++idx) {
+			_field1C2E[idx][idx2] = &_objList2[idx][idx2];
+			_field128E[idx][idx2] = 1;
+		}
+	}
+	
+	for (int idx = 0; idx < 4; ++idx)
+		_field127A[idx] = 0;
+
+	_rect1.set(50, 200, 270, 200);
+
 	GW2_GLOBALS._events.addTimer(&timer, 70);
 }
 
@@ -537,7 +549,38 @@ Scene10::~Scene10() {
 
 void Scene10::postInit(SceneObjectList *OwnerList) {
 	Scene::postInit();
+	GW2_GLOBALS._events.setCursor((CursorType)1);
+
+	setZoomPercents(20, 1, 30, 100);
+	loadScene(10);
+
+	_objectP = &_object5;
+	_objectP->postInit();
+	_objectP->setVisage(110);
+	_objectP->setStrip(1);
+	_objectP->setFrame(1);
+	_objectP->setPriority(90);
+	_objectP->hide();
+
+	_object2.postInit();
+	_object2.setVisage(100);
+	_object2.setStrip(3);
+	_object2.setFrame(1);
+	_object2.fixPriority(250);
+	_object2.setPosition(Common::Point(50, 160));
+	_object2.hide();
+
+	_object4.postInit();
+	_object4.setVisage(160);
+	_object4.setStrip(1);
+	_object4.setFrame(_object4.getFrameCount());
+	_object4.fixPriority(90);
+	_object4.setPosition(Common::Point(1, 1));
 	
+	_stripManager.addSpeaker(&_granSpeaker);
+	_stripManager.addSpeaker(&GW2_GLOBALS._gameTextSpeaker);
+
+	reset();
 }
 
 void Scene10::reset() {

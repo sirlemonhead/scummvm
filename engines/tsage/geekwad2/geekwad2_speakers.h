@@ -75,12 +75,20 @@ public:
 	virtual void setText(const Common::String &msg);
 };
 
+class SpeakerGameText: public VisualSpeaker {
+public:
+	SpeakerGameText();
+
+	virtual Common::String getClassName() { return "SpeakerGameText"; }
+};
+
 class SpeakerGran : public VisualSpeaker {
 public:
 	SpeakerGran();
 
 	virtual void proc12(Action *action);
 	virtual void setText(const Common::String &msg);
+	virtual Common::String getClassName() { return "SpeakerGran"; }
 };
 
 } // End of namespace Geekwad2
