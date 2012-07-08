@@ -84,6 +84,7 @@ private:
 	void reset();
 	void setupScore();
 	void setupAction();
+	static void timer();
 public:
 	int _field30A, _field30C;
 	Rect _bounds;
@@ -127,6 +128,7 @@ public:
 	Action5 _action5;
 public:
 	Scene10();
+	~Scene10();
 
 	virtual void postInit(SceneObjectList *OwnerList = NULL);
 };

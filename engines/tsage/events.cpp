@@ -419,4 +419,36 @@ void EventsClass::loadNotifierProc(bool postFlag) {
 	}
 }
 
+void EventsClass::addTimer(EventsTimerFunction function, int frequency) {
+	_timers.push_back(EventsTimer(function, frequency));
+}
+
+void EventsClass::removeTimer(EventsTimerFunction function) {
+	Common::List<EventsTimer>::iterator i;
+	for (i = _timers.begin(); i != _timers.end(); ++i) {
+		if ((*i).getFunction() == function) {
+			_timers.erase(i);
+			break;
+		}
+	}
+}
+
+/*--------------------------------------------------------------------------*/
+
+EventsTimer::EventsTimer(EventsTimerFunction function, int frequency) {
+	_priorCallTime = 0;
+	_frequency = frequency;
+	_function = function;
+}
+
+void EventsTimer::check() {
+	uint32 expiryTime = _priorCallTime + (1000 / _frequency);
+	uint32 currentTime = g_system->getMillis();
+
+	if (currentTime >= expiryTime) {
+		_priorCallTime = currentTime;
+		_function();
+	}
+}
+
 } // end of namespace TsAGE

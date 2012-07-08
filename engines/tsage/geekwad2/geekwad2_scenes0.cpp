@@ -524,11 +524,20 @@ Scene10::Scene10(): Scene() {
 	_stripCallback = NULL;
 	_field30C = 0;
 	_field772 = 0;
+	_fieldEB2 = 0;
+	_fieldEB4 = 3;
+	_fieldEB6  = 0;
+ 
+	GW2_GLOBALS._events.addTimer(&timer, 70);
+}
+
+Scene10::~Scene10() {
+	GW2_GLOBALS._events.removeTimer(&timer);
 }
 
 void Scene10::postInit(SceneObjectList *OwnerList) {
 	Scene::postInit();
-
+	
 }
 
 void Scene10::reset() {
@@ -597,6 +606,10 @@ void Scene10::setupAction() {
 		setAction(&_action1);
 	else
 		setAction(&_action5);	
+}
+
+void Scene10::timer() {
+
 }
 
 /*--------------------------------------------------------------------------

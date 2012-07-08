@@ -117,12 +117,33 @@ enum CursorType {
 
 class GfxSurface;
 
+typedef void (*EventsTimerFunction)();
+
+/**
+ * Timer class for methods that need to be repeatedly called each second
+ */
+class EventsTimer {
+private:
+	uint32 _priorCallTime;
+	int _frequency;
+	EventsTimerFunction _function;
+public:
+	EventsTimer(EventsTimerFunction function, int frequency);
+
+	/** Checks if it's time to call the callback, and if so, call it */
+	void check();
+
+	/** Returns the function for this timer */
+	EventsTimerFunction getFunction() const { return _function; }
+};
+
 class EventsClass : public SaveListener {
 private:
 	Common::Event _event;
 	uint32 _frameNumber;
 	uint32 _prevDelayFrame;
 	uint32 _priorFrameTime;
+	Common::List<EventsTimer> _timers;
 public:
 	EventsClass();
 
@@ -154,6 +175,12 @@ public:
 
 	virtual void listenerSynchronize(Serializer &s);
 	static void loadNotifierProc(bool postFlag);
+
+	/** Add a new timer */
+	void addTimer(EventsTimerFunction function, int frequency);
+
+	/** Remove an existing timer */
+	void removeTimer(EventsTimerFunction function);
 };
 
 } // End of namespace TsAGE
