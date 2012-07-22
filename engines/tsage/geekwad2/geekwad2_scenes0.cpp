@@ -649,7 +649,7 @@ void Scene10::process(Event &event) {
 }
 
 void Scene10::dispatch() {
-	bool var6 = true;
+//	bool var6 = true;
 	bool found = false;
 
 	if (!_field31E) {
@@ -684,7 +684,7 @@ void Scene10::dispatch() {
 
 			for (int idx = 0; idx < 4; ++idx) {
 				if (_field127A[idx]) {
-					if (_field127A[idx]._action) {
+					if (_field127A[idx]->_action) {
 						_field127A[idx]->_flags |= OBJFLAG_PANES;
 					} else {
 						_field127A[idx]->setPosition(Common::Point(
@@ -696,7 +696,7 @@ void Scene10::dispatch() {
 							_field127A[idx]->changeZoom(_field127A[idx]->_percent + 5);
 
 						if (_field127A[idx]->_bounds.intersects(_object2._bounds)) {
-							_field127A[idx]->setAction(_action4[idx]);
+							_field127A[idx]->setAction(&_action4[idx]);
 							_object2.setAction(&_action3);
 						} else if (_field127A[idx]->_position.y >= 200) {
 							_field127A[idx]->remove();
@@ -710,7 +710,7 @@ void Scene10::dispatch() {
 				for (int idx2 = 0; idx < 4; ++idx2) {
 					if (_field128E[idx2] && _field1C2E[idx][idx2]->_position.y >= 200) {
 						_field1C2E[idx][idx2]->remove();
-						_field128E[idx2] = 0;
+						_field128E[idx][idx2] = 0;
 
 						// TODO: 
 						double v1 = _fieldEB0 / 100;
@@ -718,7 +718,7 @@ void Scene10::dispatch() {
 						double v2 = _fieldEB0 / 100;
 
 						if (v2 < v1)
-							GW2_GLOBALS._soundManager.setMasterVol(GW2_GLOBALS._soundManager.getMasterVol() + 20)
+							GW2_GLOBALS._soundManager.setMasterVol(GW2_GLOBALS._soundManager.getMasterVol() + 20);
 
 						proc2(_field319C);
 						_object2._flags |= OBJFLAG_PANES;
@@ -879,10 +879,13 @@ void Scene10::proc1() {
 
 void Scene10::proc2(int v) {
 	_sound6.play(113);
-
+/*
 	switch (_fieldEC0) {
-	case 0:
-
+	default:
+		// TODO
+		break;
+	}
+*/
 }
 
 void Scene10::proc3() {
