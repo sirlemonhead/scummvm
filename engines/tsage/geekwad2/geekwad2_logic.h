@@ -41,11 +41,15 @@ public:
 };
 
 class SceneExt: public Scene {
-public:
+private:
+	bool _keyPressed[322];
 public:
 	SceneExt();
 
 	virtual Common::String getClassName() { return "SceneExt"; }
+	virtual void process(Event &event);
+
+	bool isKeyPressed(Common::KeyCode keyCode);
 };
 
 class Geekwad2Game: public Game {
@@ -57,6 +61,8 @@ public:
 	virtual void rightClick();
 	virtual bool canSaveGameStateCurrently();
 	virtual bool canLoadGameStateCurrently();
+
+	int showPauseDialog();
 };
 
 class SceneObject2: public SceneObject {

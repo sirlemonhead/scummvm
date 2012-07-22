@@ -36,6 +36,7 @@ namespace Geekwad2 {
 
 void Scene10::Action1::signal() {
 	Scene10 *scene = (Scene10 *)GW2_GLOBALS._sceneManager._scene;
+	int stripNumber;
 
 	if (scene->_fieldEB2 == 1) {
 		scene->_object3.remove();
@@ -53,39 +54,43 @@ void Scene10::Action1::signal() {
 			case 0:
 				scene->_sound2.play(101, NULL, 100);
 				GW2_GLOBALS._soundManager.setMasterVol(100);
-				scene->_stripManager.start(100, this, scene->_stripCallback);
+				stripNumber = 100;
 				break;
 			case 1:
 				scene->_sound2.play(110, NULL, 100);
 				GW2_GLOBALS._soundManager.setMasterVol(100);
-				scene->_stripManager.start(130, this, scene->_stripCallback);
+				stripNumber = 130;
 				break;
 			case 2:
 				scene->_sound2.play(103, NULL, 90);
 				GW2_GLOBALS._soundManager.setMasterVol(100);
-				scene->_stripManager.start(150, this, scene->_stripCallback);
+				stripNumber = 150;
 				break;
 			case 3:
 				scene->_sound2.play(104, NULL, 100);
 				GW2_GLOBALS._soundManager.setMasterVol(100);
-				scene->_stripManager.start(170, this, scene->_stripCallback);
+				stripNumber = 170;
 				break;
 			case 4:
 				scene->_sound2.play(105, NULL, 100);
 				GW2_GLOBALS._soundManager.setMasterVol(100);
-				scene->_stripManager.start(190, this, scene->_stripCallback);
+				stripNumber = 190;
 				break;
 			case 5:
 				scene->_sound2.play(106, NULL, 100);
 				GW2_GLOBALS._soundManager.setMasterVol(100);
-				scene->_stripManager.start(210, this, scene->_stripCallback);
+				stripNumber = 210;
 				break;
 			default:
 				scene->_sound2.play(107, NULL, 100);
 				GW2_GLOBALS._soundManager.setMasterVol(100);
-				scene->_stripManager.start(230, this, scene->_stripCallback);
+				stripNumber = 230;
 				break;
-			}		
+			}
+
+			scene->_frameNumber = GW2_GLOBALS._events.getFrameNumber() + 120;
+			scene->_stripManager.start(stripNumber, this);
+			break;
 
 		case 1:
 			scene->_field31E = 0;
@@ -519,9 +524,9 @@ void Scene10::Action7::signal() {
 
 /*--------------------------------------------------------------------------*/
 
-Scene10::Scene10(): Scene() {
+Scene10::Scene10(): SceneExt() {
 	_field30A = 0;
-	_stripCallback = NULL;
+	_frameNumber = 0;
 	_field30C = 0;
 	_field772 = 0;
 	_fieldEB2 = 0;
@@ -539,12 +544,6 @@ Scene10::Scene10(): Scene() {
 		_field127A[idx] = 0;
 
 	_rect1.set(50, 200, 270, 200);
-
-	GW2_GLOBALS._events.addTimer(&timer, 70);
-}
-
-Scene10::~Scene10() {
-	GW2_GLOBALS._events.removeTimer(&timer);
 }
 
 void Scene10::postInit(SceneObjectList *OwnerList) {
@@ -581,6 +580,166 @@ void Scene10::postInit(SceneObjectList *OwnerList) {
 	_stripManager.addSpeaker(&GW2_GLOBALS._gameTextSpeaker);
 
 	reset();
+	GW2_GLOBALS._events.addTimer(&timer, 70);
+}
+
+void Scene10::remove() {
+	GW2_GLOBALS._soundManager.setMasterVol(100);
+	GW2_GLOBALS._v4708C = 1;
+
+	GW2_GLOBALS._events.removeTimer(&timer);
+	Scene::remove();
+}
+
+void Scene10::process(Event &event) {
+	if (!_field31E) {
+		switch (event.eventType) {
+		case EVENT_BUTTON_DOWN:
+			event.eventType = EVENT_NONE;
+			event.handled = true;
+			if ((_fieldEBC == 1) && !_object2._action && (_fieldEB2 != 1) &&
+					!GW2_GLOBALS._sceneObjects->contains(&_object3)) {
+				_sound7.play(110);
+				_object2.animate(ANIM_MODE_5, NULL);
+				
+				_object3.postInit();
+				_object3.setVisage(100);
+				_object3.setStrip(2);
+				_object3.setFrame(1);
+				_object3.fixPriority(253);
+				_object3.setPosition(Common::Point(_object2._position.x, _object2._position.y - 30));
+				_object3.animate(ANIM_MODE_2, NULL);
+				_fieldEB2 = 1;
+			}
+			GW2_GLOBALS._events.waitForPress(EVENT_BUTTON_UP);
+			break;
+
+		case EVENT_KEYPRESS:
+			switch (event.kbd.ascii) {
+			case Common::KEYCODE_ESCAPE:
+				event.handled = true;
+				if (((Geekwad2Game *)GW2_GLOBALS._game)->showPauseDialog() != 0) {
+					// Stop game
+					_field30C = 1;
+					setAction(&_action2);
+				}
+				break;
+
+			case 'A':
+			case 'a':
+				resetGame();
+				event.handled = true;
+				break;
+
+			default:
+				break;
+			}
+
+		default:
+			break;
+		}
+	}
+
+	if (!_frameNumber || (_frameNumber >= GW2_GLOBALS._events.getFrameNumber())) {
+		_frameNumber = 0;
+		if (!event.handled) {
+			Scene::process(event);
+		}
+	}
+}
+
+void Scene10::dispatch() {
+	bool var6 = true;
+	bool found = false;
+
+	if (!_field31E) {
+		_object2.setPosition(GW2_GLOBALS._events._mousePos);
+		_obj4._flags |= OBJFLAG_PANES;
+		_objectP->_flags |= OBJFLAG_PANES;
+
+		if (_fieldEBC == 1) {
+			if (!_field319C && _objectP->_field8E == 1) {
+				for (int idx = 0; idx < 4; ++idx) {
+					if (_field127A[idx])
+						found = true;
+				}
+
+				if (!found) {
+					if (_fieldEB2 == 1) {
+						_object3.remove();
+						_fieldEB2 = 0;
+					}
+
+					_fieldEBC = 0;
+					setupAction();
+					_field772 = 0;
+				}
+			}
+
+			if (_fieldEB2 == 1) {
+				_object3.setPosition(Common::Point(_object3._position.x, _object3._position.y - 10));
+				_object3.setZoom(MAX(_object3._percent - 5, 5));
+				proc1();
+			}
+
+			for (int idx = 0; idx < 4; ++idx) {
+				if (_field127A[idx]) {
+					if (_field127A[idx]._action) {
+						_field127A[idx]->_flags |= OBJFLAG_PANES;
+					} else {
+						_field127A[idx]->setPosition(Common::Point(
+							_field127A[idx]->_position.x + GW2_GLOBALS._randomSource.getRandomNumber(4) - 2,
+							_field127A[idx]->_position.y + _fieldEC8 / 100
+						));
+
+						if ((_field127A[idx]->_percent + 5) < 100)
+							_field127A[idx]->changeZoom(_field127A[idx]->_percent + 5);
+
+						if (_field127A[idx]->_bounds.intersects(_object2._bounds)) {
+							_field127A[idx]->setAction(_action4[idx]);
+							_object2.setAction(&_action3);
+						} else if (_field127A[idx]->_position.y >= 200) {
+							_field127A[idx]->remove();
+							_field127A[idx] = NULL;
+						}
+					}
+				}
+			}
+
+			for (int idx = _fieldEB4; idx <= _fieldEB6; ++idx) {
+				for (int idx2 = 0; idx < 4; ++idx2) {
+					if (_field128E[idx2] && _field1C2E[idx][idx2]->_position.y >= 200) {
+						_field1C2E[idx][idx2]->remove();
+						_field128E[idx2] = 0;
+
+						// TODO: 
+						double v1 = _fieldEB0 / 100;
+						_fieldEB0 += _fieldEC2;
+						double v2 = _fieldEB0 / 100;
+
+						if (v2 < v1)
+							GW2_GLOBALS._soundManager.setMasterVol(GW2_GLOBALS._soundManager.getMasterVol() + 20)
+
+						proc2(_field319C);
+						_object2._flags |= OBJFLAG_PANES;
+
+						proc3();
+					}
+				}
+			}
+		}
+
+		// Update turret position
+		if (isKeyPressed(Common::KEYCODE_LEFT)) {
+			if (_object2._position.x <= 265)
+				_object2._position.x += 10;
+		} else if (isKeyPressed(Common::KEYCODE_RIGHT)) {
+			if (_object2._position.x >= 55)
+				_object2._position.x -= 10;
+		}
+	}
+
+	Scene::dispatch();
 }
 
 void Scene10::reset() {
@@ -608,7 +767,6 @@ void Scene10::reset() {
 	_obj4.remove();
 	_obj4.setup(100, 6, 4, 50, 13, 130, 1);
 	_obj4.draw();
-
 	_obj5.remove();
 	_obj6.remove();
 	_obj7.remove();
@@ -651,7 +809,83 @@ void Scene10::setupAction() {
 		setAction(&_action5);	
 }
 
+void Scene10::resetGame() {
+	_field31E = 1;
+	
+	for (int idx = _fieldEB6; idx < _fieldEB4; ++idx) {
+		for (int idx2 = 0; idx2 < 4; ++idx) {
+			if (_field1C2E[idx][idx2]) {
+				_field1C2E[idx][idx2]->remove();
+				_field128E[idx][idx2] = 0;
+			}
+		}
+	}
+
+	_objectP->hide();
+	_objectP->_field8E = 1;
+	_objectP->setAction(NULL);
+	_objectP->addMover(NULL);
+
+	if (!_fieldEB2) {
+		_object3.remove();
+		_fieldEB2 = 0;
+	}
+
+	for (int idx = 0; idx < 4; ++idx) {
+		if (_field127A[idx]) {
+			_field127A[idx]->remove();
+			_field127A[idx] = NULL;
+		}
+	}
+
+	_fieldEC0 = 11;
+	_fieldEBC = 0;
+	_fieldECC = 1;
+	_field319A = 0;
+	_fieldEC2 = 70;
+	_fieldEC4 = 0;
+	_fieldEC6 = 3;
+	_field2022 = 0;
+	_fieldEC8 = 400;
+	_fieldECA = 8;
+	_field319C = 0;
+
+	_score = 20000;
+	setupScore();
+
+	_obj3.remove();
+	_obj3.setup(100, 6, 4, 40, 13, 130, 1);
+	_obj3.draw();
+
+	_obj4.remove();
+	_obj4.setup(100, 6, 4, 50, 13, 130, 1);
+	_obj4.draw();
+
+	_obj5.remove();
+	_obj6.remove();
+	_obj7.remove();
+	_obj2.remove();
+
+	setupAction();
+}
+
 void Scene10::timer() {
+
+}
+
+void Scene10::proc1() {
+
+}
+
+void Scene10::proc2(int v) {
+	_sound6.play(113);
+
+	switch (_fieldEC0) {
+	case 0:
+
+}
+
+void Scene10::proc3() {
 
 }
 

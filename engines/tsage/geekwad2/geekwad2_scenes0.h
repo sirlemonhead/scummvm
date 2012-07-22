@@ -39,7 +39,7 @@ namespace Geekwad2 {
 
 using namespace TsAGE;
 
-class Scene10: public Scene {
+class Scene10: public SceneExt {
 	/* Actions */
 	class Action1 : public Action {
 	public:
@@ -84,11 +84,16 @@ private:
 	void reset();
 	void setupScore();
 	void setupAction();
+	void resetGame();
+	void proc1();
+	void proc2(int v);
+	void proc3();
+
 	static void timer();
 public:
 	int _field30A, _field30C;
 	Rect _bounds;
-	StripCallback *_stripCallback;
+	uint32 _frameNumber;
 	int _field31E;
 	SpeakerGran _granSpeaker;
 	Action1 _action1;
@@ -128,9 +133,11 @@ public:
 	Action5 _action5;
 public:
 	Scene10();
-	~Scene10();
 
 	virtual void postInit(SceneObjectList *OwnerList = NULL);
+	virtual void remove();
+	virtual void process(Event &event);
+	virtual void dispatch();
 };
 
 class Scene150: public Scene {

@@ -73,9 +73,27 @@ bool Geekwad2Game::canSaveGameStateCurrently() {
 void Geekwad2Game::processEvent(Event &event) {
 }
 
+int Geekwad2Game::showPauseDialog() {
+	return MessageDialog::show("Stop game in progress?     ", "Resume game", " Stop game ");
+}
+
 /*--------------------------------------------------------------------------*/
 
 SceneExt::SceneExt(): Scene() {
+	Common::fill(&_keyPressed[0], &_keyPressed[322], false);
+}
+
+void SceneExt::process(Event &event) {
+	if (event.eventType == Common::EVENT_KEYDOWN)
+		_keyPressed[event.kbd.keycode] = true;
+	else if (event.eventType == Common::EVENT_KEYUP)
+		_keyPressed[event.kbd.keycode] = true;
+
+	Scene::process(event);
+}
+
+bool SceneExt::isKeyPressed(Common::KeyCode keyCode) {
+	return _keyPressed[keyCode];
 }
 
 /*--------------------------------------------------------------------------*/
