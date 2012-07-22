@@ -278,6 +278,76 @@ void SpeakerGran::setText(const Common::String &msg) {
 	_object1.setAction(&_action3);
 }
 
+/*--------------------------------------------------------------------------*/
+
+SpeakerMurray20::SpeakerMurray20(): VisualSpeaker() {
+	_fontNumber = 31;
+	_color1 = 23;
+	_color2 = 15;
+	_offsetPos = Common::Point(10, 40);
+	_speakerName = "MURRAY";
+}
+
+void SpeakerMurray20::proc12(Action *action) {
+	VisualSpeaker::proc12(action);
+
+	GW2_GLOBALS._scenePalette.loadPalette(8005);
+	if (GW2_GLOBALS._sceneManager._hasPalette)
+		GW2_GLOBALS._scenePalette.refresh();
+
+ 	_removeObject2 = true;
+	_object2.postInit();
+	_object2.setVisage(8005);
+	_object2.setStrip2(1);
+	_object2.setFrame(1);
+	_object2.fixPriority(200);
+	_object2.setPosition(Common::Point(GW2_GLOBALS._sceneManager._scene->_sceneBounds.left + 230,
+			GW2_GLOBALS._sceneManager._scene->_sceneBounds.top + 135));
+
+ 	_removeObject1 = true;
+	_object1.postInit();
+	_object1.setVisage(8005);
+	_object1.setStrip2(2);
+	_object1.setFrame(1);
+	_object1.fixPriority(205);
+	_object1.setPosition(Common::Point(GW2_GLOBALS._sceneManager._scene->_sceneBounds.left + 230,
+			GW2_GLOBALS._sceneManager._scene->_sceneBounds.top + 91));
+
+	_removeObject4 = true;
+	_object4.postInit();
+	_object4.setVisage(8010);
+	_object4.setStrip2(3);
+	_object4.setFrame(_object4.getFrameCount());
+	_object4.fixPriority(205);
+	_object4.setPosition(Common::Point(GW2_GLOBALS._sceneManager._scene->_sceneBounds.left + 224,
+			GW2_GLOBALS._sceneManager._scene->_sceneBounds.top + 65));
+	_object4.setAction(&_action1);
+	
+	_removeObject3 = true;
+	_object3.postInit();
+	_object3.setVisage(8005);
+	_object3.setStrip2(4);
+	_object3.setFrame(_object3.getFrameCount());
+	_object3.fixPriority(202);
+	_object3.setPosition(Common::Point(GW2_GLOBALS._sceneManager._scene->_sceneBounds.left + 231,
+			GW2_GLOBALS._sceneManager._scene->_sceneBounds.top + 63));
+
+	_removeObject5 = true;
+	_object5.postInit();
+	_object5.setVisage(8005);
+	_object5.setStrip2(5);
+	_object5.setFrame(1);
+	_object5.fixPriority(202);
+	_object5.setPosition(Common::Point(GW2_GLOBALS._sceneManager._scene->_sceneBounds.left + 229,
+			GW2_GLOBALS._sceneManager._scene->_sceneBounds.top + 136));
+}
+
+void SpeakerMurray20::setText(const Common::String &msg) {
+	VisualSpeaker::setText(msg);
+	_object1._v = _numFrames;
+	_object1.setAction(&_action3);
+}
+
 } // End of namespace Geekwad2
 
 } // End of namespace TsAGE

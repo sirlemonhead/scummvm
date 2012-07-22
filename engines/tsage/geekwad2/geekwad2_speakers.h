@@ -91,6 +91,15 @@ public:
 	virtual Common::String getClassName() { return "SpeakerGran"; }
 };
 
+class SpeakerMurray20 : public VisualSpeaker {
+public:
+	SpeakerMurray20();
+
+	virtual void proc12(Action *action);
+	virtual void setText(const Common::String &msg);
+	virtual Common::String getClassName() { return "SpeakerMurray20"; }
+};
+
 } // End of namespace Geekwad2
 
 } // End of namespace TsAGE

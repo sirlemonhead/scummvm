@@ -320,6 +320,7 @@ public:
 	ASoundExt _sound1;
 	int _v4708C;
 	int _v492C6;
+	int _v472A1;
 
 	virtual void reset();
 	virtual void synchronize(Serializer &s);
