@@ -48,6 +48,7 @@ public:
 
 	virtual Common::String getClassName() { return "SceneExt"; }
 	virtual void process(Event &event);
+	virtual void loadResources() {}
 
 	bool isKeyPressed(Common::KeyCode keyCode);
 };

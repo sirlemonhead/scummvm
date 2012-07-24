@@ -34,6 +34,256 @@ namespace Geekwad2 {
  *
  *--------------------------------------------------------------------------*/
 
+void Scene20::Action1::signal() {
+	Scene20 *scene = (Scene20 *)GW2_GLOBALS._sceneManager._scene;
+
+	switch (_actionIndex++) {
+	case 0:
+		scene->_object3.animate(ANIM_MODE_5, this);
+		break;
+	case 1:
+		setAction(&scene->_action3);
+		break;
+	default:
+		break;
+	}
+}
+
+void Scene20::Action2::signal() {
+	//Scene20 *scene = (Scene20 *)GW2_GLOBALS._sceneManager._scene;
+
+	//TODO
+}
+
+void Scene20::Action3::signal() {
+	Scene20 *scene = (Scene20 *)GW2_GLOBALS._sceneManager._scene;
+	int stripNum = 0;
+
+	switch (_actionIndex) {
+	case 0:
+		scene->_field776 = 0;
+		scene->_field778 = 0;
+
+		switch (scene->_field66D6 / 24) {
+		case 0:
+			if (scene->_sound6.getSoundNum() != 200)
+				scene->_sound6.play(200);
+
+			scene->loadScene(205);
+			scene->_object1.setPosition(Common::Point(160, 187));
+
+			if (scene->_field66D6 < 24)
+				stripNum = 300;
+			break;
+
+		case 3:
+			if (scene->_sound6.getSoundNum() != 201)
+				scene->_sound6.play(201);
+
+			scene->loadScene(200);
+			scene->_object1.setPosition(Common::Point(160, 187));
+
+			if (scene->_field66D6 < 24) {
+				stripNum = 350;
+				scene->_frameNumber = GW2_GLOBALS._events.getFrameNumber() + 120;
+			}
+			break;
+
+		case 6:
+			if (scene->_sound6.getSoundNum() != 202)
+				scene->_sound6.play(202);
+
+			scene->loadScene(210);
+			scene->_object1.setPosition(Common::Point(160, 187));
+
+			if (scene->_field66D6 < 24) {
+				stripNum = 360;
+				scene->_frameNumber = GW2_GLOBALS._events.getFrameNumber() + 120;
+			}
+			break;
+
+		case 9:
+			if (scene->_sound6.getSoundNum() != 203)
+				scene->_sound6.play(203);
+
+			scene->loadScene(215);
+			scene->_object1.setPosition(Common::Point(160, 187));
+
+			if (scene->_field66D6 < 24) {
+				stripNum = 365;
+				scene->_frameNumber = GW2_GLOBALS._events.getFrameNumber() + 120;
+			}
+			break;
+
+		case 12:
+			if (scene->_sound6.getSoundNum() != 200)
+				scene->_sound6.play(200);
+
+			scene->loadScene(230);
+			GW2_GLOBALS._sceneRegions.load(205);
+			scene->_object1.setPosition(Common::Point(160, 187));
+
+			if (scene->_field66D6 < 24) {
+				stripNum = 370;
+				scene->_frameNumber = GW2_GLOBALS._events.getFrameNumber() + 120;
+			}
+			break;
+
+		case 15:
+			if (scene->_sound6.getSoundNum() != 201)
+				scene->_sound6.play(201);
+
+			scene->loadScene(230);
+			GW2_GLOBALS._sceneRegions.load(200);
+			scene->_object1.setPosition(Common::Point(160, 187));
+			break;
+
+		case 18:
+			if (scene->_sound6.getSoundNum() != 202)
+				scene->_sound6.play(202);
+
+			scene->loadScene(230);
+			GW2_GLOBALS._sceneRegions.load(210);
+			scene->_object1.setPosition(Common::Point(160, 187));
+			break;
+
+		case 21:
+			if (scene->_sound6.getSoundNum() != 203)
+				scene->_sound6.play(203);
+
+			scene->loadScene(230);
+			GW2_GLOBALS._sceneRegions.load(215);
+			scene->_object1.setPosition(Common::Point(160, 187));
+			break;
+
+		default:
+			break;
+		}
+
+		scene->_scoreLabel._message = "SCORE";
+		scene->_scoreLabel._maxWidth = 180;
+		scene->_scoreLabel._fontNumber = 21;
+		scene->_scoreLabel._fontFgColour = 106;
+		scene->_scoreLabel._fontBgColour = 110;
+		scene->_scoreLabel._fontFgColour2 = 51;
+		scene->_scoreLabel._textMode = ALIGN_CENTER;
+		scene->_scoreLabel.setup(0, 0, 0, 161, 5, 156, 0);
+		scene->_scoreLabel.draw();
+
+		scene->updateScore();
+
+		if (_actionIndex == 0) {
+			setDelay(240);
+		} else {
+			GW2_GLOBALS._v4708C = 1;
+			scene->_field766 = 1;
+			
+			scene->_object5.hide();
+			scene->_object5._field31E = 1;
+			scene->_object5.setAction(NULL);
+			scene->_object4.hide();
+			scene->_object6.hide();
+			scene->_object1.setFrame(1);
+			scene->_object1.setAction(NULL);
+			scene->_object1.animate(ANIM_MODE_NONE);
+
+			if (stripNum == 300 && scene->_field30C) {
+				setDelay(1);
+			} else {
+				scene->_sound2.stop();
+				scene->_field30C = 1;
+				scene->_stripManager.start(stripNum, this);
+			}
+		}
+		break;
+
+	case 1:
+		scene->loadResources();
+		scene->_field776 = 0;
+		GW2_GLOBALS._v4708C = 0;
+		scene->_field766 = 0;
+
+		if (--scene->_field66D4 < 0)
+			scene->_field66D4 = 0;
+		scene->_field66DC -= 5;
+		if (scene->_field66DC < 0)
+			scene->_field66DC = 0;
+		scene->_field66DE -= 5;
+		if (scene->_field66DE < 0)
+			scene->_field66DE = 0;
+
+		if (scene->_field66D6 == 0) {
+			scene->_field66DA = 3;
+		} else if (scene->_field66DA < 19) {
+			++scene->_field66DA;
+		}
+		scene->_field66D8 = 0;
+
+		for (int idx = 0; idx <= scene->_field66DA; ++idx) {
+			if (!scene->_field5E4E[idx] && !GW2_GLOBALS._sceneObjects->contains(scene->_field5E4E[idx])) {
+				Scene20::Object *obj = scene->_field5E4E[idx] = &scene->_objList1[idx];
+
+				obj->postInit();
+				obj->setVisage(220);
+				obj->setStrip(1);
+				obj->fixPriority(100);
+				obj->_objIndex = idx;
+				obj->_field31A = 0;
+				obj->_field312 = 0;
+				obj->_field310 = 0;
+				obj->_field314 = 1;
+				obj->_field31C = 1;
+				obj->_newPosition = Common::Point(-10, -10);
+				obj->setAction(NULL);
+				obj->hide();
+				obj->setPosition(Common::Point(GW2_GLOBALS._randomSource.getRandomNumber(299) + 10, 25));
+				obj->_field316 = (GW2_GLOBALS._randomSource.getRandomNumber(1) == 1) ? 10 : -10;
+				obj->_field318 = 0;
+
+				++scene->_field66D8;
+			}
+		}
+
+		scene->_field77A = 0;
+		++_actionIndex;
+		setDelay(1);
+		break;
+
+	case 2:
+		if (!scene->_object5._action)
+			scene->_object5.setAction(&scene->_action9);
+
+		if (scene->_objectP->_bounds.intersects(scene->_object1._bounds))
+			scene->_object1._position.x += 10;
+
+		scene->_objectP->setPosition(Common::Point(scene->_objectP->_position.x - 3, scene->_objectP->_position.y));
+
+		if (scene->_objectP->_position.x <= -20) {
+			scene->_objectP->remove();
+			scene->_objectP = NULL;
+			remove();
+		} else {
+			for (int idx = 0; idx < scene->_field66DA; ++idx) {
+				if (scene->_field5E4E[idx] && scene->_field5E4E[idx]->_field31C == 1 &&
+						(scene->_objectP->_position.x - 18) < scene->_field5E4E[idx]->_position.x) {
+					scene->_field5E4E[idx]->_field31C = 0;
+					scene->_field5E4E[idx]->show();
+					scene->_field5E4E[idx]->_sound.play(210);
+				}
+			}
+
+			setDelay(1);
+		}
+		break;
+
+	default:
+		break;
+	}
+}
+
+
+/*--------------------------------------------------------------------------*/
+
 Scene20::Scene20(): SceneExt() {
 	_field30C = 0;
 	_field768 = 0;
@@ -399,8 +649,8 @@ void Scene20::timer() {
 }
 
 void Scene20::reset() {
-	_bgObject2.remove();
-	_bgObject1.remove();
+	_scoreLabel.remove();
+	_scoreValue.remove();
 
 	_field766 = 0;
 	_field77E = 5;
@@ -435,7 +685,7 @@ void Scene20::reset() {
 	_object6.animate(ANIM_MODE_2, NULL);
 	_object6.setPosition(_object1._position);
 	_object6.hide();
-	_field61E0 = 0;
+	_currentScore = 0;
 
 	_object3.postInit();
 	_object3.setVisage(210);
@@ -477,6 +727,16 @@ void Scene20::reset() {
 	}
 
 	setAction(&_action3);
+}
+
+void Scene20::updateScore() {
+	if (_currentScore == 0) {
+		_scoreBuffer = "0";
+	} else {
+		_scoreBuffer = Common::String::format("%d", _currentScore);
+	}
+
+
 }
 
 } // End of namespace Geekwad2

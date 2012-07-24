@@ -81,16 +81,18 @@ class Scene20: public SceneExt {
 	public:
 		ASound _sound;
 
+		int _field310;
 		int _field312, _field314;
-		int _field316;
-		int _field318, _field31A;
-		int _field31C, _field31E;
+		int _field316, _field318;
+		int _field31A, _field31C;
+		int _field31E, _objIndex;
 		int _field322, _field324;
 		Common::Point _newPosition;
 	};
 
 private:
 	void reset();
+	void updateScore();
 
 	static void timer();
 public:
@@ -113,9 +115,9 @@ public:
 	Object *_field5E4E[20];
 	Object _object7;
 	SceneObject *_objectP;
-	int _field61CC;
-	int _field61E0;
-	BackgroundTextualObject _bgObject1, _bgObject2, _bgObject3, _bgObject4;
+	Common::String _scoreBuffer;
+	int _currentScore;
+	BackgroundTextualObject _scoreValue, _scoreLabel, _bgObject3, _bgObject4;
 	BackgroundTextualObject _bgObject5, _bgObject6, _bgObject7;
 	int _field66D2;
 	int _field66D4;
