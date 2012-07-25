@@ -281,6 +281,363 @@ void Scene20::Action3::signal() {
 	}
 }
 
+void Scene20::Action4::signal() {
+	Scene20 *scene = (Scene20 *)GW2_GLOBALS._sceneManager._scene;
+	Scene20::Object *obj = static_cast<Scene20::Object *>(_owner);
+
+	switch (_actionIndex++) {
+	case 0:
+		setDelay(GW2_GLOBALS._randomSource.getRandomNumber(scene->_field66DE - 1) * 60);
+		break;
+
+	case 1:
+		obj->_strip = 2;
+		obj->animate(ANIM_MODE_2, NULL);
+		setDelay((scene->_field66DC - 1) * 60);
+		break;
+		
+	case 2:
+		obj->_frame = 1;
+		obj->_strip = 3;
+		obj->_sound.play(220);
+		obj->animate(ANIM_MODE_5, this);
+		break;
+
+	case 3:
+		obj->_frame = 1;
+		obj->_strip = 4;
+		obj->_field314 = 0;
+		obj->animate(ANIM_MODE_2, NULL);
+		remove();
+		break;
+
+	default:
+		break;
+	}
+}
+
+void Scene20::Action5::signal() {
+	Scene20 *scene = (Scene20 *)GW2_GLOBALS._sceneManager._scene;
+
+	switch (_actionIndex) {
+	case 0:
+		++_actionIndex;
+		setDelay(GW2_GLOBALS._randomSource.getRandomNumber(119) * 60);
+		scene->_object5.animate(ANIM_MODE_NONE);
+		break;
+
+	case 1:
+	case 2:
+		++_actionIndex;
+		scene->_object5.animate(ANIM_MODE_4, scene->_object5._frame, 1, this);
+		break;
+
+	case 3:
+		_actionIndex = 0;
+		scene->_object5.animate(ANIM_MODE_4, scene->_object5._frame, 1, this);
+		break;
+
+	default:
+		break;
+	}
+}
+
+void Scene20::Action6::signal() {
+	Scene20 *scene = (Scene20 *)GW2_GLOBALS._sceneManager._scene;
+
+	switch (_actionIndex++) {
+	case 0:
+		setDelay(1);
+		break;
+
+	case 1:
+		scene->_object1.setFrame(1);
+		if (scene->_object1._strip == 3) {
+			scene->_object1.setStrip(1);
+		} else if (scene->_object1._strip == 4) {
+			scene->_object1.setStrip(2);
+		}
+
+		scene->_object1.animate(ANIM_MODE_4, 3, 1, this);
+		break;
+
+	case 2: {
+		scene->_sound1.play(231);
+		int xOffset = (scene->_object1._strip == 1) ? 8 : -8;
+
+		for (int idx = 0; idx < 20; ++idx) {
+			if (scene->_field5E4E[idx] && !scene->_field5E4E[idx]->_field31A && 
+					ABS(scene->_field5E4E[idx]->_position.x - (scene->_object1._position.x + xOffset)) < 9 &&
+					ABS(scene->_field5E4E[idx]->_position.y - scene->_object1._position.y) < 10) {
+				--scene->_field66D8;
+				scene->_object3.setPosition(scene->_field5E4E[idx]->_position);
+				scene->_object3._frame = 1;
+
+				if (scene->_field66D8 > 0) {
+					scene->_object3.animate(ANIM_MODE_5, NULL);
+				} else {
+					scene->setAction(&scene->_action1);
+				}
+
+				scene->_sound3.play(232);
+				scene->_field5E4E[idx]->remove();
+				scene->_field5E4E[idx] = NULL;
+
+				if (scene->_field66D8 <= 0) {
+					++scene->_field66D6;
+					if (!scene->_objectP) {
+						Scene20::Object *obj = scene->_objectP = &scene->_object7;
+						obj->postInit();
+						obj->setVisage(230);
+						obj->setStrip(5);
+						obj->setFrame(1);
+						obj->fixPriority(110);
+						obj->setAction(NULL);
+						obj->setPosition(Common::Point(350, 18));
+					}
+				}
+			}
+
+			++scene->_currentScore += 123;
+			scene->updateScore();
+		}
+
+		scene->_object1.animate(ANIM_MODE_4, 1, 1, NULL);
+		remove();
+		break;
+	}
+
+	default:
+		break;
+	}
+}
+
+void Scene20::Action7::signal() {
+	Scene20 *scene = (Scene20 *)GW2_GLOBALS._sceneManager._scene;
+	int regionIndex;
+
+	switch (_actionIndex++) {
+	case 0:
+		scene->_field766 = 1;
+		GW2_GLOBALS._v4708C = 1;
+		setDelay(1);
+		break;
+
+	case 1:
+		scene->_object1.hide();
+		scene->_object6.hide();
+		scene->_sound2.stop();
+
+		scene->_object2.postInit();
+		scene->_object2.setVisage(250);
+		scene->_object2.fixPriority(101);
+		scene->_object2.setFrame(1);
+		scene->_object2.setPosition(scene->_object1._position);
+
+		regionIndex = GW2_GLOBALS._sceneRegions.indexOf(scene->_object1._position);
+		if (regionIndex == 7 || regionIndex == 39) {
+			for (int idx = 0; idx < 20; ++idx) {
+				if (scene->_field5E4E[idx] && scene->_field5E4E[idx]->_field31A == 1) {
+					scene->_field5E4E[idx]->remove();
+					scene->_field5E4E[idx] = NULL;
+				}
+			}
+
+			switch (scene->_field30A) {
+			case 0:
+				scene->_sound5.play(294);
+				scene->_field30E = 1;
+				scene->_object2.setStrip(2);
+				scene->_object2.animate(ANIM_MODE_4, 9, 1, this);
+				break;
+			case 1:
+				scene->_field30E = 2;
+				scene->_object2.setStrip(3);
+				scene->_object2.animate(ANIM_MODE_4, 7, 1, this);
+				break;
+			case 2:
+				scene->_sound5.play(291);
+				scene->_field30E = 3;
+				scene->_object2.setStrip(4);
+				scene->_object2.animate(ANIM_MODE_4, 6, 1, this);
+				break;
+			case 3:
+				scene->_field30E = 3;
+				scene->_object2.setStrip(5);
+				scene->_object2.animate(ANIM_MODE_4, 10, 1, this);
+				break;
+			default:
+				break;
+			}
+		} else {
+			scene->_field30E = 0;
+			scene->_object2.setStrip(1);
+			scene->_object2.animate(ANIM_MODE_4, 4, 1, this);
+		}
+		break;
+
+	case 2:
+		switch (scene->_object2._strip) {
+		case 1:
+			scene->_sound5.play(290);
+			scene->_object2.animate(ANIM_MODE_5, this);
+			break;
+		case 2:
+			scene->_sound5.play(232);
+			scene->_object2.animate(ANIM_MODE_5, this);
+			break;
+		case 3:
+			scene->_sound5.play(293);
+			scene->_object2.animate(ANIM_MODE_4, 9, 1, this);
+			break;
+		case 4:
+			scene->_sound5.play(295);
+			scene->_object2.animate(ANIM_MODE_5, this);
+			break;
+		case 5:
+			scene->_sound5.play(232);
+			scene->_object2.animate(ANIM_MODE_5, this);
+			break;
+		default:
+			break;
+		}
+		break;
+
+	case 3:
+		if (scene->_object2._strip == 3) {
+			scene->_sound5.play(293);
+			scene->_object2.animate(ANIM_MODE_4, 11, 1, this);
+		} else {
+			setDelay(1);
+		}
+		break;
+
+	case 4:
+		if (scene->_object2._strip == 3) {
+			scene->_sound5.play(293);
+			scene->_object2.animate(ANIM_MODE_5, this);
+		} else {
+			setDelay(1);
+		}
+		break;
+
+	case 5:
+		scene->setAction(&scene->_action2);
+		break;
+
+	default:
+		break;
+	}
+}
+
+void Scene20::Action8::signal() {
+	Scene20 *scene = (Scene20 *)GW2_GLOBALS._sceneManager._scene;
+	Scene20::Object *obj = static_cast<Scene20::Object *>(_owner);
+
+	if (obj->_field312 == 0) {
+		if (obj->_field31A == 1) {
+			obj->setPosition(Common::Point(scene->_object1._position.x + obj->_field324,
+				scene->_object1._position.y + obj->_field322));
+		} else {
+			int regionIndex = GW2_GLOBALS._sceneRegions.indexOf(obj->_position);
+
+			switch (regionIndex) {
+			case 0:
+			case 2:
+			case 13:
+				break;
+
+			default:
+				scene->_field780 = ABS(obj->_position.x - scene->_object1._position.x);
+				scene->_field782 = 319 - obj->_position.x + scene->_object1._position.x;
+				scene->_field784 = 319 - scene->_object1._position.x + obj->_position.x;
+
+				if (scene->_field780 > scene->_field782 || scene->_field780 > scene->_field784) {
+					if (scene->_field782 >= scene->_field784) {
+						obj->_field316 = -scene->_field66E0;
+						obj->setStrip(4);
+					} else {
+						obj->_field316 = scene->_field66E0;
+						obj->setStrip(5);
+					}
+				} else if (obj->_position.x <= scene->_object1._position.x) {
+					obj->_field316 = scene->_field66E0;
+					obj->setStrip(5);
+				} else {
+					obj->_field316 = -scene->_field66E0;
+					obj->setStrip(4);
+				}
+				break;
+			}
+		}
+
+		setDelay(1);
+	} else {
+		if (obj->_field310 == 0) {
+			obj->_field310 = 1;
+			setDelay(180);
+		} else {
+			obj->_field310 = 0;
+			obj->_field312 = 0;
+			setDelay(1);
+		}
+	}
+}
+
+void Scene20::Action9::signal() {
+	Scene20 *scene = (Scene20 *)GW2_GLOBALS._sceneManager._scene;
+
+	switch (_actionIndex) {
+	case 0:
+		switch (GW2_GLOBALS._randomSource.getRandomNumber(2)) {
+		case 0:
+			scene->_object4.setPosition(Common::Point(30, 190));
+			scene->_object5.setPosition(Common::Point(30, 170));
+			break;
+		case 1:
+			scene->_object4.setPosition(Common::Point(161, 190));
+			scene->_object5.setPosition(Common::Point(161, 170));
+			break;
+		case 2:
+			scene->_object4.setPosition(Common::Point(290, 190));
+			scene->_object5.setPosition(Common::Point(290, 170));
+			break;
+		default:
+			break;
+		}
+
+		scene->_object4.show();
+		scene->_object5.show();
+		scene->_object5._field31E = 0;
+
+		_actionIndex = 1;
+		setDelay(1);
+		break;
+
+	case 1:
+		scene->_object5._field318 = -160;
+		scene->_object4.setFrame(1);
+		scene->_object4.animate(ANIM_MODE_5, NULL);
+		scene->_sound4.play(240);
+
+		if (scene->_object5._position.y > -10) {
+			_actionIndex = 1;
+			setDelay(240);
+		} else {
+			scene->_object4.hide();
+			scene->_object5.hide();
+			scene->_object5._field31E = 1;
+
+			_actionIndex = 0;
+			setDelay(1);
+		}
+		break;
+
+	default:
+		break;
+	}
+}
+
 
 /*--------------------------------------------------------------------------*/
 

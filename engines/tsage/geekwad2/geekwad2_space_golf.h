@@ -70,8 +70,12 @@ class Scene20: public SceneExt {
 		virtual void signal();
 	};
 	class Action8 : public Action {
+	public:
+		virtual void signal();
 	};
 	class Action9 : public Action {
+	public:
+		virtual void signal();
 	};
 	class Action10 : public Action {
 	};
@@ -114,7 +118,7 @@ public:
 	Object _objList1[20];
 	Object *_field5E4E[20];
 	Object _object7;
-	SceneObject *_objectP;
+	Object *_objectP;
 	Common::String _scoreBuffer;
 	int _currentScore;
 	BackgroundTextualObject _scoreValue, _scoreLabel, _bgObject3, _bgObject4;
