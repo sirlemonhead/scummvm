@@ -35,6 +35,8 @@ namespace Geekwad2 {
 
 using namespace TsAGE;
 
+#define GW2_GAME (*static_cast<Geekwad2Game *>(GW2_GLOBALS._game))
+
 class SceneFactory {
 public:
 	static Scene *createScene(int sceneNumber);
@@ -51,6 +53,7 @@ public:
 	virtual void loadResources() {}
 
 	bool isKeyPressed(Common::KeyCode keyCode);
+	void saveHistory() { warning("TODO: SaveHistory"); }
 };
 
 class Geekwad2Game: public Game {
@@ -64,6 +67,10 @@ public:
 	virtual bool canLoadGameStateCurrently();
 
 	int showPauseDialog();
+	void minigameDone(int minigameNumber, uint32 score);
+	int getRandomEmptyLockIndex();
+	void saveHistory();
+	void showLockDigit(char digit);
 };
 
 class SceneObject2: public SceneObject {

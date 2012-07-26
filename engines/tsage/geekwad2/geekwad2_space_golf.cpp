@@ -50,9 +50,119 @@ void Scene20::Action1::signal() {
 }
 
 void Scene20::Action2::signal() {
-	//Scene20 *scene = (Scene20 *)GW2_GLOBALS._sceneManager._scene;
+	Scene20 *scene = (Scene20 *)GW2_GLOBALS._sceneManager._scene;
+	const uint32 v1 = 0, v2 = 0, v3 = 0;
 
-	//TODO
+	switch (_actionIndex) {
+	case 0:
+		++_actionIndex;
+		scene->_field766 = 1;
+		scene->_object1.hide();
+		scene->_object1.setAction(NULL);
+		scene->_object1.animate(ANIM_MODE_NONE);
+		
+		scene->_object2.remove();
+
+		for (int idx = 0; idx < scene->_field66DA; ++idx) {
+			if (scene->_field5E4E[idx]) {
+				scene->_field5E4E[idx]->remove();
+				scene->_field5E4E[idx] = NULL;
+			}
+		}
+
+		if (scene->_objectP) {
+			scene->_objectP->remove();
+			scene->_objectP = NULL;
+		}
+
+		scene->_object5.setAction(NULL);
+		scene->_object5.hide();
+		scene->_object5._field31E = 1;
+		
+		scene->_object4.hide();
+		scene->_object6.hide();
+
+		if (scene->_field768) {
+			_actionIndex = 3;
+			scene->_field768 = 0;
+			setDelay(1);
+		} else {
+			scene->_frameNumber = GW2_GLOBALS._events.getFrameNumber() + 120;
+			GW2_GLOBALS._v4708C = 1;
+
+			int stripNum = 0;
+			switch (scene->_field30E) {
+			case 0:
+				stripNum = 320;
+				break;
+			case 1:
+				stripNum = 325;
+				break;
+			case 2:
+				stripNum = 335;
+				break;
+			case 3:
+				stripNum = 346;
+				break;
+			default:
+				break;
+			}
+
+			scene->_stripManager.start(stripNum, this);
+		}
+		break;
+
+	case 1:
+		++_actionIndex;
+		setDelay(1);
+		break;
+
+	case 2:
+		++_actionIndex;
+		GW2_GAME.minigameDone(1, scene->_currentScore);
+
+		if (!v3 && v1 > v2 && !GW2_GLOBALS._showComboDigits) {
+			//  Required score has been obtained
+			int idx = GW2_GAME.getRandomEmptyLockIndex();
+			char lockDigit = GW2_GLOBALS._lockCombo[idx];
+			GW2_GLOBALS._lockDisplay[idx] = lockDigit;
+			GW2_GLOBALS._lockDigits[idx] = true;
+			GW2_GLOBALS._minigameDigitObtained[1] = true;
+
+			scene->saveHistory();
+			GW2_GAME.showLockDigit(lockDigit);
+		}
+
+		setDelay(1);
+		break;
+
+	case 3:
+		++_actionIndex;
+		GW2_GLOBALS._soundManager.loadSound(91, false);
+		GW2_GLOBALS._soundManager.loadSound(601, false);
+		scene->_stripManager.start(310, this, scene);
+		break;
+
+	case 4:
+		switch (scene->_stripManager._field2E8) {
+		case 426:
+			scene->reset();
+			break;
+		case 427:
+			GW2_GLOBALS._sceneManager.changeScene(500);
+			break;
+		case 428:
+			// Query if the user wants to quit the game
+			GW2_GAME.quitGame();
+
+			--_actionIndex;
+			setDelay(1);
+			break;
+		default:
+			break;
+		}
+		break;
+	}
 }
 
 void Scene20::Action3::signal() {
@@ -1093,7 +1203,14 @@ void Scene20::updateScore() {
 		_scoreBuffer = Common::String::format("%d", _currentScore);
 	}
 
+	//TODO
+}
 
+void Scene20::stripCallback(int v) {
+	if (v == 302)
+		GW2_GLOBALS._sound2.play(601);
+	else if (v == 303)
+		GW2_GLOBALS._sound2.play(91);
 }
 
 } // End of namespace Geekwad2

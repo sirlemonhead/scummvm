@@ -146,6 +146,7 @@ public:
 	virtual void remove();
 	virtual void process(Event &event);
 	virtual void dispatch();
+	virtual void stripCallback(int v);
 };
 
 } // End of namespace Geekwad2

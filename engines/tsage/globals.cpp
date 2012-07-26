@@ -577,6 +577,13 @@ namespace Geekwad2 {
 
 void Geekwad2Globals::reset() {
 	_v4708C = 0;	
+	_showComboDigits = 0;
+	_v492C6 = 0;
+	_v472A1 = 0;
+	Common::fill(&_lockCombo[0], &_lockCombo[5], '\0');
+	Common::fill(&_lockDisplay[0], &_lockDisplay[5], '\0');
+	Common::fill(&_lockDigits[0], &_lockDigits[5], false);
+	Common::fill(&_minigameDigitObtained[0], &_minigameDigitObtained[5], false);
 }
 
 void Geekwad2Globals::synchronize(Serializer &s) {

@@ -318,9 +318,15 @@ class Geekwad2Globals: public Globals {
 public:
 	SpeakerGameText _gameTextSpeaker;
 	ASoundExt _sound1;
+	ASound _sound2;
 	int _v4708C;
+	int _showComboDigits;
 	int _v492C6;
 	int _v472A1;
+	char _lockCombo[5];
+	char _lockDisplay[5];
+	bool _lockDigits[5];
+	bool _minigameDigitObtained[5];
 
 	virtual void reset();
 	virtual void synchronize(Serializer &s);

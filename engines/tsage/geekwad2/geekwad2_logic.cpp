@@ -77,6 +77,24 @@ int Geekwad2Game::showPauseDialog() {
 	return MessageDialog::show("Stop game in progress?     ", "Resume game", " Stop game ");
 }
 
+void Geekwad2Game::minigameDone(int minigameNumber, uint32 score) {
+	warning("TODO");
+}
+
+int Geekwad2Game::getRandomEmptyLockIndex() {
+	warning("TODO");
+	return -1;
+}
+
+void Geekwad2Game::saveHistory() {
+	warning("TODO");
+}
+
+void Geekwad2Game::showLockDigit(char digit) {
+	warning("TODO");
+}
+
+
 /*--------------------------------------------------------------------------*/
 
 SceneExt::SceneExt(): Scene() {
