@@ -25,6 +25,7 @@
 #include "tsage/tsage.h"
 #include "tsage/geekwad2/geekwad2_logic.h"
 #include "tsage/geekwad2/geekwad2_scenes0.h"
+#include "tsage/geekwad2/geekwad2_space_golf.h"
 
 namespace TsAGE {
 
@@ -32,7 +33,8 @@ namespace Geekwad2 {
 
 void Geekwad2Game::start() {
 	// Start the game
-	g_globals->_sceneManager.changeScene(150);
+//	g_globals->_sceneManager.changeScene(150);
+	g_globals->_sceneManager.changeScene(20);
 }
 
 Scene *Geekwad2Game::createScene(int sceneNumber) {
@@ -40,6 +42,9 @@ Scene *Geekwad2Game::createScene(int sceneNumber) {
 	/* Scene group #0 */
 	// Spaced Solicitors
 	case 10: return new Scene10();
+
+	// Space Golf
+	case 20: return new Scene20();
 
 	// Tsunami title screen
 	case 150: return new Scene150();

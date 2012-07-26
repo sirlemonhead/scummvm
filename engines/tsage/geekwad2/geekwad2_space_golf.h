@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef TSAGE_GEEKWAD2_SCENES0_H
-#define TSAGE_GEEKWAD2_SCENES0_H
+#ifndef TSAGE_GEEKWAD2_SPACE_GOLF_H
+#define TSAGE_GEEKWAD2_SPACE_GOLF_H
 
 #include "common/scummsys.h"
 #include "tsage/converse.h"
