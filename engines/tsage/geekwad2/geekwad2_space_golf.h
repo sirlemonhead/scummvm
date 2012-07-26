@@ -103,6 +103,7 @@ public:
 	int _field30A, _field30C, _field30E;
 	Action1 _action1;
 	SpeakerMurray20 _murraySpeaker;
+	SpeakerGameText _gameTextSpeaker;
 	Action2 _action2;
 	uint32 _frameNumber;
 	int _field766, _field768;

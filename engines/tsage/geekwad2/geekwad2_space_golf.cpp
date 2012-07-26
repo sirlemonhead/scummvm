@@ -767,7 +767,7 @@ void Scene20::postInit(SceneObjectList *OwnerList) {
 	GW2_GLOBALS._events.addTimer(&timer, 70);
 
 	_stripManager.addSpeaker(&_murraySpeaker);
-	_stripManager.addSpeaker(&GW2_GLOBALS._gameTextSpeaker);
+	_stripManager.addSpeaker(&_gameTextSpeaker);
 
 	reset();
 }

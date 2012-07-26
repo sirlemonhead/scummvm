@@ -96,6 +96,7 @@ public:
 	uint32 _frameNumber;
 	int _field31E;
 	SpeakerGran _granSpeaker;
+	SpeakerGameText _gameTextSpeaker;
 	Action1 _action1;
 	Action2 _action2;
 	int _field772;

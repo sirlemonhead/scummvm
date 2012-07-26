@@ -577,7 +577,7 @@ void Scene10::postInit(SceneObjectList *OwnerList) {
 	_object4.setPosition(Common::Point(1, 1));
 	
 	_stripManager.addSpeaker(&_granSpeaker);
-	_stripManager.addSpeaker(&GW2_GLOBALS._gameTextSpeaker);
+	_stripManager.addSpeaker(&_gameTextSpeaker);
 
 	reset();
 	GW2_GLOBALS._events.addTimer(&timer, 70);
