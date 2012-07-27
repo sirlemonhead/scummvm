@@ -56,7 +56,7 @@ void Scene20::Action2::signal() {
 	switch (_actionIndex) {
 	case 0:
 		++_actionIndex;
-		scene->_field766 = 1;
+		scene->_swingClub = true;
 		scene->_object1.hide();
 		scene->_object1.setAction(NULL);
 		scene->_object1.animate(ANIM_MODE_NONE);
@@ -171,7 +171,7 @@ void Scene20::Action3::signal() {
 
 	switch (_actionIndex) {
 	case 0:
-		scene->_field776 = 0;
+		scene->_swingClub = false;
 		scene->_field778 = 0;
 
 		switch (scene->_field66D6 / 24) {
@@ -286,7 +286,7 @@ void Scene20::Action3::signal() {
 			setDelay(240);
 		} else {
 			GW2_GLOBALS._v4708C = 1;
-			scene->_field766 = 1;
+			scene->_swingClub = true;
 			
 			scene->_object5.hide();
 			scene->_object5._field31E = 1;
@@ -309,9 +309,9 @@ void Scene20::Action3::signal() {
 
 	case 1:
 		scene->loadResources();
-		scene->_field776 = 0;
+		scene->_swingClub = false;
 		GW2_GLOBALS._v4708C = 0;
-		scene->_field766 = 0;
+		scene->_swingClub = false;
 
 		if (--scene->_field66D4 < 0)
 			scene->_field66D4 = 0;
@@ -528,7 +528,7 @@ void Scene20::Action7::signal() {
 
 	switch (_actionIndex++) {
 	case 0:
-		scene->_field766 = 1;
+		scene->_swingClub = true;
 		GW2_GLOBALS._v4708C = 1;
 		setDelay(1);
 		break;
@@ -755,11 +755,11 @@ Scene20::Scene20(): SceneExt() {
 	_field30C = 0;
 	_field768 = 0;
 	GW2_GLOBALS._v4708C = 0;
-	_field766 = 0;
+	_swingClub = false;
 	_frameNumber = 0;
 	_field30A = 2;
 	_field778 = 0;
-	_field776 = 0;
+	_swingClub = false;
 }
 
 void Scene20::postInit(SceneObjectList *OwnerList) {
@@ -779,7 +779,7 @@ void Scene20::remove() {
 }
 
 void Scene20::process(Event &event) {
-	if (!_field766) {
+	if (!_swingClub) {
 		if (event.eventType == EVENT_KEYPRESS && event.kbd.keycode == Common::KEYCODE_ESCAPE) {
 			_field768 = 1;
 			setAction(&_action2);
@@ -796,7 +796,7 @@ void Scene20::process(Event &event) {
 void Scene20::dispatch() {
 	bool flag = false;
 
-	if (!_field766) {
+	if (!_swingClub) {
 		_object4._flags |= OBJFLAG_PANES;
 		int regionIndex = GW2_GLOBALS._sceneRegions.indexOf(_object1._position);
 		if ((regionIndex == 7) || (regionIndex == 39)) {
@@ -899,12 +899,12 @@ void Scene20::dispatch() {
 		if (_field778 > 0)
 			--_field778;
 
-		if (_field776 == 1 && _field778 > 0 && !_action) {
+		if (_swingClub && _field778 > 0 && !_action) {
 			_object1.setAction(&_action6);
 			_field778 = 6;
 		}
 
-		_field776 = 0;
+		_swingClub = false;
 		if (_field77C < 60)
 			_field77C += 3;
 		if (_object1._position.y <= 10) {
@@ -1112,14 +1112,18 @@ void Scene20::dispatch() {
 }
 
 void Scene20::timer() {
+	Scene20 *scene = (Scene20 *)GW2_GLOBALS._sceneManager._scene;
 
+	// If the space bar has been pressed, start a club swing
+	if (scene->isKeyPressed(Common::KEYCODE_SPACE))
+		scene->_swingClub = true;
 }
 
 void Scene20::reset() {
 	_scoreLabel.remove();
 	_scoreValue.remove();
 
-	_field766 = 0;
+	_swingClub = false;
 	_field77E = 5;
 	_field77C = 5;
 
@@ -1203,7 +1207,17 @@ void Scene20::updateScore() {
 		_scoreBuffer = Common::String::format("%d", _currentScore);
 	}
 
-	//TODO
+	if (_bgSceneObjects.contains(&_scoreValue))
+		_scoreValue.remove();
+
+	_scoreValue._maxWidth = 180;
+	_scoreValue._fontNumber = 21;
+	_scoreValue._fontFgColour = 106;
+	_scoreValue._fontFgColour2 = 51;
+	_scoreValue._textMode = ALIGN_CENTER;
+	_scoreValue._message = _scoreBuffer;
+	_scoreValue.setup(100, 1, 1, 161, 15, 156, 1);
+	_scoreValue.draw();
 }
 
 void Scene20::stripCallback(int v) {

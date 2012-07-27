@@ -106,7 +106,8 @@ public:
 	SpeakerGameText _gameTextSpeaker;
 	Action2 _action2;
 	uint32 _frameNumber;
-	int _field766, _field768;
+	bool _swingClub;
+	int _field768;
 	Rect _rect1;
 	int _field776, _field778, _field77A, _field77C;
 	int _field77E, _field780, _field782, _field784;
