@@ -22,6 +22,7 @@ MODULE_OBJS := \
 	events.o \
 	geekwad2/geekwad2_logic.o \
 	geekwad2/geekwad2_scenes0.o \
+	geekwad2/geekwad2_spaced_invaders.o \
 	geekwad2/geekwad2_space_golf.o \
 	geekwad2/geekwad2_speakers.o \
 	globals.o \

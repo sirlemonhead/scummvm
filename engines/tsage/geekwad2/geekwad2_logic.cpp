@@ -26,6 +26,7 @@
 #include "tsage/geekwad2/geekwad2_logic.h"
 #include "tsage/geekwad2/geekwad2_scenes0.h"
 #include "tsage/geekwad2/geekwad2_space_golf.h"
+#include "tsage/geekwad2/geekwad2_spaced_invaders.h"
 
 namespace TsAGE {
 
