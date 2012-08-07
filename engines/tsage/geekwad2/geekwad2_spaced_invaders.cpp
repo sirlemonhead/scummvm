@@ -119,14 +119,119 @@ void Scene10::Action2::signal() {
 		GW2_GLOBALS._v4708C = 1;
 		scene->_field31E = 1;
 		scene->_sound2.stop();
-		//TODO
+		
+		for (int idx = scene->_fieldEB4; idx <= scene->_fieldEB6; ++idx) {
+			for (int idx2 = 0; idx2 < 4; ++idx) {
+				if (scene->_field1C2E[idx][idx2]) {
+					scene->_field1C2E[idx][idx2]->remove();
+					scene->_field128E[idx][idx2] = 0;
+				}
+			}
+		}
+
+		scene->_objectP->hide();
+		scene->_objectP->_field8E = 1;
+		scene->_objectP->setAction(NULL);
+		scene->_objectP->addMover(NULL);
+
+		if (scene->_fieldEB2 == 1) {
+			scene->_object3.remove();
+			scene->_fieldEB2 = 0;
+		}
+
+		for (int idx = 0; idx < 4; ++idx) {
+			if (scene->_field127A[idx]) {
+				scene->_field127A[idx]->remove();
+				scene->_field127A[idx] = NULL;
+			}
+		}
+
+		scene->_object2.hide();
+
+		if (!scene->_field30C) {
+			int stripNum;
+			switch (scene->_fieldEC0) {
+			case 0:
+				stripNum = 120;
+				break;
+			case 1:
+				stripNum = 140;
+				break;
+			case 2:
+				stripNum = 160;
+				break;
+			case 3:
+				stripNum = 180;
+				break;
+			case 4:
+				stripNum = 200;
+				break;
+			case 5:
+				stripNum = 220;
+				break;
+			default:
+				stripNum = 240;
+				break;
+			}
+
+			scene->_frameNumber = GW2_GLOBALS._events.getFrameNumber() + 120;
+			scene->_stripManager.start(stripNum, this);
+		} else {
+			_actionIndex = 3;
+			scene->_field30C = 0;
+			scene->signal();
+		}
+		break;
 
 	case 1:
 		++_actionIndex;
 		setDelay(1);
 		break;
 
-	// TODO:
+	case 2:
+		++_actionIndex;
+		GW2_GAME.minigameDone(0, scene->_currentScore);
+
+		if (!GW2_GLOBALS._minigameDigitObtained[0] && GW2_GLOBALS._highestScores[0] > GW2_GLOBALS._scoresToBeat[0]
+				&& !GW2_GLOBALS._showComboDigits) {
+			//  Required score has been obtained
+
+			int idx = GW2_GAME.getRandomEmptyLockIndex();
+			char lockDigit = GW2_GLOBALS._lockCombo[idx];
+			GW2_GLOBALS._lockDisplay[idx] = lockDigit;
+			GW2_GLOBALS._lockDigits[idx] = true;
+			GW2_GLOBALS._minigameDigitObtained[1] = true;
+
+			scene->saveHistory();
+			GW2_GAME.showLockDigit(lockDigit);
+		}
+
+		setDelay(1);
+		break;
+
+	case 3:
+		GW2_GLOBALS._soundManager.loadSound(91, false);
+		GW2_GLOBALS._soundManager.loadSound(601, false);
+		scene->_stripManager.start(280, this, scene);
+		break;
+
+	case 4:
+		switch (scene->_stripManager._field2E8) {
+		case 405:
+			scene->reset();
+			break;
+		case 410:
+			GW2_GLOBALS._sceneManager.changeScene(500);
+			break;
+		case 415:
+			GW2_GAME.quitGame();
+			--_actionIndex;
+			setDelay(1);
+			break;
+		default:
+			break;
+		}
+		break;
 
 	default:
 		break;
@@ -712,7 +817,7 @@ void Scene10::dispatch() {
 						_field1C2E[idx][idx2]->remove();
 						_field128E[idx][idx2] = 0;
 
-						// TODO: 
+						// TODO: Figure out floating point logic
 						double v1 = _fieldEB0 / 100;
 						_fieldEB0 += _fieldEC2;
 						double v2 = _fieldEB0 / 100;
@@ -742,6 +847,13 @@ void Scene10::dispatch() {
 	Scene::dispatch();
 }
 
+void Scene10::stripCallback(int v) {
+	if (v == 302)
+		GW2_GLOBALS._sound2.play(601);
+	else if (v == 30)
+		GW2_GLOBALS._sound2.play(91);
+}
+
 void Scene10::reset() {
 	_field31E = 1;
 	_fieldEC0 = -1;
@@ -756,7 +868,7 @@ void Scene10::reset() {
 	_fieldEC8 = 100;
 	_fieldECA = 20;
 	_field319C = 0;
-	_score = 0;
+	_currentScore = 0;
 	
 	setupScore();
 
@@ -776,8 +888,8 @@ void Scene10::reset() {
 }
 
 void Scene10::setupScore() {
-	if (_score) {
-		_numberBuffer = Common::String::format("%ld", _score);
+	if (_currentScore) {
+		_numberBuffer = Common::String::format("%ld", _currentScore);
 	} else {
 		_numberBuffer = "0";
 	}
@@ -850,7 +962,7 @@ void Scene10::resetGame() {
 	_fieldECA = 8;
 	_field319C = 0;
 
-	_score = 20000;
+	_currentScore = 20000;
 	setupScore();
 
 	_obj3.remove();
@@ -870,22 +982,167 @@ void Scene10::resetGame() {
 }
 
 void Scene10::timer() {
+	Scene10 *scene = (Scene10 *)GW2_GLOBALS._sceneManager._scene;
 
+	if (scene->isKeyPressed(Common::KEYCODE_SPACE))
+		scene->_field772 = 1;
 }
 
 void Scene10::proc1() {
+	bool breakFlag = false;
 
+	for (int idx = _fieldEB4; idx <= _fieldEB6; ++idx) {
+		for (int idx2 = 0; idx2 < 4; ++idx2) {
+			if (_field128E[idx][idx2] && _field1C2E[idx][idx2]->_bounds.intersects(_object3._bounds)) {
+				breakFlag = true;
+				_object4.setPosition(_field1C2E[idx][idx2]->_position);
+				_object4._strip = 2;
+				_object4._frame = 1;
+				_object4.animate(ANIM_MODE_5, NULL);
+				_field1C2E[idx][idx2]->remove();
+				_field128E[idx][idx2] = 0;
+
+				_object3.remove();
+
+				_fieldEB2 = 0;
+				_fieldEBA -= 5;
+				_object2.setFrame(1);
+
+				int v = 0; // TODO: Decode floating point logic here
+				if (v) {
+					GW2_GLOBALS._soundManager.setMasterVol(GW2_GLOBALS._soundManager.getMasterVol() - 20);
+				}
+
+				_sound5.play(111);
+				_currentScore += 93;
+				setupScore();
+
+				_field2022 += 93;
+				if (_field2022 >= 10000) {
+					_field2022 -= 10000;
+					++_fieldECA;
+					
+					switch (_fieldECA) {
+					case 2:
+						_obj3.setup(100, 6, 4, 40, 13, 130, 1);
+						_obj3.draw();
+						break;
+					case 3:
+						_obj4.setup(100, 6, 4, 50, 13, 130, 1);
+						_obj4.draw();
+						break;
+					case 4:
+						_obj5.setup(100, 6, 4, 60, 13, 130, 1);
+						_obj5.draw();
+						break;
+					case 5:
+						_obj6.setup(100, 6, 4, 70, 13, 130, 1);
+						_obj6.draw();
+						break;
+					case 6:
+						_obj7.setup(100, 6, 4, 80, 13, 130, 1);
+						_obj7.draw();
+						break;
+					default:
+						break;
+					}
+				}
+
+				--_field319C;
+				bool flag = false;
+				for (int idx3 = _fieldEB4; idx3 >= _fieldEB6 && !flag; --idx3) {
+					if (_field128E[idx3][idx2])
+						flag = true;
+				}
+
+				if (!flag) {
+					// Rotate the object list
+					Object *objList[4];
+					for (int idx3 = _fieldEB4; idx3 >= _fieldEB6 && !flag; --idx3) {
+						objList[idx3] = _field1C2E[idx3][idx2];
+					}
+
+					for (int idx3 = idx2; idx3 <= 2; ++idx3) {
+						for (int idx4 = _fieldEB4; idx4 >= _fieldEB6; --idx4) {
+							_field128E[idx4][idx3] = _field128E[idx4][idx3 + 1];
+							_field1C2E[idx4][idx3] = _field1C2E[idx4][idx3 + 1];
+						}
+					}
+
+					for (int idx3 = _fieldEB4; idx3 >= _fieldEB6 && !flag; --idx3) {
+						_field1C2E[idx3][3] = objList[idx3];
+						_field128E[idx3][3] = 0;
+					}
+				}
+
+				break;
+			}
+		}
+
+		if (!breakFlag)
+			break;
+	}
+
+	if (_fieldEB2 == 1) {
+		if (!_objectP->_field8E && _object3._bounds.intersects(_objectP->_bounds)) {
+			_object4.setPosition(_objectP->_position);
+			_object4._strip = 1;
+			_object4._frame = 1;
+			_object4.animate(ANIM_MODE_5, NULL);
+
+			_sound5.play(114);
+			_objectP->hide();
+			_objectP->_field8E = 1;
+
+			_currentScore += 218;
+			setupScore();
+
+			_field2022 += 218;
+			if (_field2022 >= 10000) {
+				_field2022 -= 10000;
+
+				switch (++_fieldEC6) {
+				case 2:
+					_obj3.setup(100, 6, 4, 40, 13, 130, 1);
+					_obj3.draw();
+					break;
+				case 3:
+					_obj4.setup(100, 6, 4, 50, 13, 130, 1);
+					_obj4.draw();
+					break;
+				case 4:
+					_obj5.setup(100, 6, 4, 60, 13, 130, 1);
+					_obj5.draw();
+					break;
+				case 5:
+					_obj6.setup(100, 6, 4, 70, 13, 130, 1);
+					_obj6.draw();
+					break;
+				case 6:
+					_obj7.setup(100, 6, 4, 80, 13, 130, 1);
+					_obj7.draw();
+					break;
+				}
+			}
+		}
+
+		if (_object3._position.y < 10) {
+			_object3.remove();
+			_fieldEB2 = 0;
+			_object2.setFrame(1);
+		}
+	}
 }
 
 void Scene10::proc2(int v) {
 	_sound6.play(113);
-/*
-	switch (_fieldEC0) {
-	default:
-		// TODO
-		break;
-	}
-*/
+	int lineNum = MAX(_fieldEC0 / 2, 6);
+	TextualObject *obj = TextualObject::init(10, lineNum, Common::Point(160, 180), false, 300, true, 31, 44, 44, 0);
+	
+	GW2_GLOBALS._sceneObjects->draw();
+	GW2_GLOBALS._events.waitForPress();
+
+	obj->remove();
 }
 
 void Scene10::proc3() {

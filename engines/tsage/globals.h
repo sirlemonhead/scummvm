@@ -325,7 +325,10 @@ public:
 	char _lockCombo[5];
 	char _lockDisplay[5];
 	bool _lockDigits[5];
+	uint32 _highestScores[5];
+	uint32 _scoresToBeat[5];
 	bool _minigameDigitObtained[5];
+	SceneText *_textualObject;
 
 	virtual void reset();
 	virtual void synchronize(Serializer &s);

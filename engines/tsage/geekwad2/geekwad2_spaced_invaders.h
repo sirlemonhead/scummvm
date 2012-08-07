@@ -121,7 +121,7 @@ public:
 	Action7 _actionList1[16];
 	Action8 _actionList2[16];
 	Common::String _numberBuffer;
-	int _score;
+	uint32 _currentScore;
 	int _field2022;
 
 	BackgroundTextualObject _obj1, _obj2, _obj3, _obj4;
@@ -139,6 +139,7 @@ public:
 	virtual void remove();
 	virtual void process(Event &event);
 	virtual void dispatch();
+	virtual void stripCallback(int v);
 };
 
 } // End of namespace Geekwad2

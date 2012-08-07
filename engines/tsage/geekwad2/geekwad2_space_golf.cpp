@@ -51,7 +51,6 @@ void Scene20::Action1::signal() {
 
 void Scene20::Action2::signal() {
 	Scene20 *scene = (Scene20 *)GW2_GLOBALS._sceneManager._scene;
-	const uint32 v1 = 0, v2 = 0, v3 = 0;
 
 	switch (_actionIndex) {
 	case 0:
@@ -121,7 +120,8 @@ void Scene20::Action2::signal() {
 		++_actionIndex;
 		GW2_GAME.minigameDone(1, scene->_currentScore);
 
-		if (!v3 && v1 > v2 && !GW2_GLOBALS._showComboDigits) {
+		if (!GW2_GLOBALS._minigameDigitObtained[1] && GW2_GLOBALS._highestScores[1] > GW2_GLOBALS._scoresToBeat[1]
+				&& !GW2_GLOBALS._showComboDigits) {
 			//  Required score has been obtained
 			int idx = GW2_GAME.getRandomEmptyLockIndex();
 			char lockDigit = GW2_GLOBALS._lockCombo[idx];

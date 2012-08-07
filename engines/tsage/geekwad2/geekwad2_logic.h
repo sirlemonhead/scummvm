@@ -111,6 +111,14 @@ public:
 	void clear();
 };
 
+class TextualObject: public SceneText {
+public:
+	static TextualObject *init(int resNum, int lineNum, const Common::Point &pt, bool displayFlag, int maxWidth,
+			bool centreText, int fontNumber, int colour1, int colour2, int colour3);
+	static TextualObject *init(const Common::String &msg, const Common::Point &pt, bool displayFlag, int maxWidth,
+			bool centreText, int fontNumber, int colour1, int colour2, int colour3);
+};
+
 } // End of namespace Geekwad2
 
 } // End of namespace TsAGE

@@ -248,6 +248,72 @@ void BackgroundTextualObject::clear() {
 	_textMode = ALIGN_LEFT;
 }
 
+TextualObject *TextualObject::init(int resNum, int lineNum, const Common::Point &pt, bool displayFlag, int maxWidth,
+											 bool centreText, int fontNumber, int colour1, int colour2, int colour3) {
+	Common::String msg = g_resourceManager->getMessage(resNum, lineNum);
+	return init(msg, pt, displayFlag, maxWidth, centreText, fontNumber, colour1, colour2, colour3);
+}
+
+TextualObject *TextualObject::init(const Common::String &msg, const Common::Point &pt, bool displayFlag, int maxWidth,
+											 bool centreText, int fontNumber, int colour1, int colour2, int colour3) {
+	Rect textRect;
+	GfxFontBackup gfxFont;
+	GfxManager &gfxManager = g_globals->gfxManager();
+	TextualObject *obj = NULL;
+
+	Common::Point textPos = Common::Point(pt.x == -1 ? GW2_GLOBALS._dialogCenter.x : pt.x,
+		(pt.x == -1) ? GW2_GLOBALS._dialogCenter.y : pt.y);
+
+	if (!displayFlag) {
+		obj = (GW2_GLOBALS._textualObject) ? static_cast<TextualObject *>(GW2_GLOBALS._textualObject) : new TextualObject();
+		obj->_fontNumber = fontNumber;
+		obj->_color1 = colour1;
+		obj->_color2 = colour2;
+		obj->_color3 = colour3;
+		obj->_width = maxWidth;
+		obj->setup(msg);
+		obj->setPosition(textPos);
+		obj->changeZoom(100);
+
+		if (GW2_GLOBALS._textualObject)
+			GW2_GLOBALS._textualObject = NULL;
+		else
+			obj->_flags |= OBJFLAG_CLONED;
+
+		obj->fixPriority(220);
+	}
+
+	// Set up the font and get the required bounds size
+	gfxManager._font.setFontNumber(fontNumber);
+	gfxManager._font.getStringBounds(msg.c_str(), textRect, maxWidth);
+
+	// Set the text area
+	if (centreText)
+		textRect.center(textPos);
+	else
+		textRect.moveTo(textPos);
+	textRect.contain(gfxManager._bounds);
+
+	if (!displayFlag) {
+		obj->setPosition(Common::Point(GW2_GLOBALS._gfxManagerInstance._bounds.left, 
+			GW2_GLOBALS._gfxManagerInstance._bounds.top));
+	}
+
+	if (displayFlag) {
+		gfxManager.setFillFlag(false);
+		gfxManager._font._colors.foreground = colour1;
+		gfxManager._font._colors2.background = colour2;
+		gfxManager._font._colors2.foreground = colour3;
+
+		gfxManager._font.writeLines(msg.c_str(), textRect, ALIGN_LEFT);
+		GW2_GLOBALS._events.waitForPress();
+
+		obj = NULL;
+	}
+
+	return obj;
+}
+
 } // End of namespace Geekwad2
 
 } // End of namespace TsAGE
