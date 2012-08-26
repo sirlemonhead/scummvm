@@ -4074,6 +4074,7 @@ SceneHandler::SceneHandler() {
 	_saveGameSlot = -1;
 	_loadGameSlot = -1;
 	_prevFrameNumber = 0;
+	_defaultEventMask = ~EVENT_MOUSE_MOVE;
 }
 
 void SceneHandler::registerHandler() {
@@ -4246,7 +4247,7 @@ void SceneHandler::dispatch() {
 
 	// Handle pending events
 	Event event;
-	if (g_globals->_events.getEvent(event)) {
+	if (g_globals->_events.getEvent(event, _defaultEventMask)) {
 		// Process pending events
 		do {
 			process(event);

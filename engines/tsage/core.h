@@ -894,6 +894,7 @@ public:
 	int _delayTicks;
 	Common::String _saveName;
 	uint32 _prevFrameNumber;
+	int _defaultEventMask;
 protected:
 	virtual void playerAction(Event &event) {}
 	virtual void processEnd(Event &event) {}
