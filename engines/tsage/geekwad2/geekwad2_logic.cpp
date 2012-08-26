@@ -33,6 +33,8 @@ namespace TsAGE {
 namespace Geekwad2 {
 
 void Geekwad2Game::start() {
+	g_globals->_sceneHandler->_defaultEventMask = ~0;
+
 	// Start the game
 //	g_globals->_sceneManager.changeScene(150);
 	g_globals->_sceneManager.changeScene(10);

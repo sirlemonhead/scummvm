@@ -46,7 +46,7 @@ void Scene10::Action1::signal() {
 	switch (_actionIndex++) {
 	case 0:
 		GW2_GLOBALS._v4708C = 1;
-		scene->_object2.hide();
+		scene->_hand.hide();
 		scene->_objectP->setAction(NULL);
 		scene->_objectP->addMover(NULL);
 		scene->_field31E = 1;
@@ -95,7 +95,7 @@ void Scene10::Action1::signal() {
 
 	case 1:
 		scene->_field31E = 0;
-		scene->_object2.show();
+		scene->_hand.show();
 		setAction(&scene->_action5);
 		break;
 
@@ -146,7 +146,7 @@ void Scene10::Action2::signal() {
 			}
 		}
 
-		scene->_object2.hide();
+		scene->_hand.hide();
 
 		if (!scene->_field30C) {
 			int stripNum;
@@ -244,16 +244,16 @@ void Scene10::Action3::signal() {
 	switch (_actionIndex++) {
 	case 0:
 		scene->_sound4.play(112, NULL);
-		scene->_object2._strip = 7;
-		scene->_object2._frame = 1;
-		scene->_object2._numFrames = 5;
-		scene->_object2.animate(ANIM_MODE_5, this);
+		scene->_hand._strip = 7;
+		scene->_hand._frame = 1;
+		scene->_hand._numFrames = 5;
+		scene->_hand.animate(ANIM_MODE_5, this);
 		break;
 	
 	case 1:
-		scene->_object2._numFrames = 10;
-		scene->_object2._strip = 3;
-		scene->_object2._frame = 1;
+		scene->_hand._numFrames = 10;
+		scene->_hand._strip = 3;
+		scene->_hand._frame = 1;
 		remove();
 		break;
 
@@ -666,13 +666,13 @@ void Scene10::postInit(SceneObjectList *OwnerList) {
 	_objectP->setPriority(90);
 	_objectP->hide();
 
-	_object2.postInit();
-	_object2.setVisage(100);
-	_object2.setStrip(3);
-	_object2.setFrame(1);
-	_object2.fixPriority(250);
-	_object2.setPosition(Common::Point(50, 160));
-	_object2.hide();
+	_hand.postInit();
+	_hand.setVisage(100);
+	_hand.setStrip(3);
+	_hand.setFrame(1);
+	_hand.fixPriority(250);
+	_hand.setPosition(Common::Point(160, 199));
+	_hand.hide();
 
 	_object4.postInit();
 	_object4.setVisage(160);
@@ -699,20 +699,24 @@ void Scene10::remove() {
 void Scene10::process(Event &event) {
 	if (!_field31E) {
 		switch (event.eventType) {
+		case EVENT_MOUSE_MOVE:
+			_hand.setPosition(Common::Point(CLIP(GW2_GLOBALS._events._mousePos.x, (int16)45, (int16)274), 199));
+			break;
+
 		case EVENT_BUTTON_DOWN:
 			event.eventType = EVENT_NONE;
 			event.handled = true;
-			if ((_fieldEBC == 1) && !_object2._action && (_fieldEB2 != 1) &&
+			if ((_fieldEBC == 1) && !_hand._action && (_fieldEB2 != 1) &&
 					!GW2_GLOBALS._sceneObjects->contains(&_object3)) {
 				_sound7.play(110);
-				_object2.animate(ANIM_MODE_5, NULL);
+				_hand.animate(ANIM_MODE_5, NULL);
 				
 				_object3.postInit();
 				_object3.setVisage(100);
 				_object3.setStrip(2);
 				_object3.setFrame(1);
 				_object3.fixPriority(253);
-				_object3.setPosition(Common::Point(_object2._position.x, _object2._position.y - 30));
+				_object3.setPosition(Common::Point(_hand._position.x, _hand._position.y - 30));
 				_object3.animate(ANIM_MODE_2, NULL);
 				_fieldEB2 = 1;
 			}
@@ -758,7 +762,6 @@ void Scene10::dispatch() {
 	bool found = false;
 
 	if (!_field31E) {
-		_object2.setPosition(GW2_GLOBALS._events._mousePos);
 		_obj4._flags |= OBJFLAG_PANES;
 		_objectP->_flags |= OBJFLAG_PANES;
 
@@ -800,9 +803,9 @@ void Scene10::dispatch() {
 						if ((_field127A[idx]->_percent + 5) < 100)
 							_field127A[idx]->changeZoom(_field127A[idx]->_percent + 5);
 
-						if (_field127A[idx]->_bounds.intersects(_object2._bounds)) {
+						if (_field127A[idx]->_bounds.intersects(_hand._bounds)) {
 							_field127A[idx]->setAction(&_action4[idx]);
-							_object2.setAction(&_action3);
+							_hand.setAction(&_action3);
 						} else if (_field127A[idx]->_position.y >= 200) {
 							_field127A[idx]->remove();
 							_field127A[idx] = NULL;
@@ -826,7 +829,7 @@ void Scene10::dispatch() {
 							GW2_GLOBALS._soundManager.setMasterVol(GW2_GLOBALS._soundManager.getMasterVol() + 20);
 
 						proc2(_field319C);
-						_object2._flags |= OBJFLAG_PANES;
+						_hand._flags |= OBJFLAG_PANES;
 
 						proc3();
 					}
@@ -834,13 +837,13 @@ void Scene10::dispatch() {
 			}
 		}
 
-		// Update turret position
+		// Update hand position
 		if (isKeyPressed(Common::KEYCODE_LEFT)) {
-			if (_object2._position.x <= 265)
-				_object2._position.x += 10;
+			if (_hand._position.x <= 265)
+				_hand._position.x += 10;
 		} else if (isKeyPressed(Common::KEYCODE_RIGHT)) {
-			if (_object2._position.x >= 55)
-				_object2._position.x -= 10;
+			if (_hand._position.x >= 55)
+				_hand._position.x -= 10;
 		}
 	}
 
@@ -924,8 +927,8 @@ void Scene10::setupAction() {
 void Scene10::resetGame() {
 	_field31E = 1;
 	
-	for (int idx = _fieldEB6; idx <= _fieldEB4; ++idx) {
-		for (int idx2 = 0; idx2 < 4; ++idx) {
+	for (int idx = _fieldEB4; idx >= _fieldEB6; --idx) {
+		for (int idx2 = 0; idx2 < 4; ++idx2) {
 			if (_field1C2E[idx][idx2]) {
 				_field1C2E[idx][idx2]->remove();
 				_field128E[idx][idx2] = 0;
@@ -1006,7 +1009,7 @@ void Scene10::proc1() {
 
 				_fieldEB2 = 0;
 				_fieldEBA -= 5;
-				_object2.setFrame(1);
+				_hand.setFrame(1);
 
 				int v = 0; // TODO: Decode floating point logic here
 				if (v) {
@@ -1129,7 +1132,7 @@ void Scene10::proc1() {
 		if (_object3._position.y < 10) {
 			_object3.remove();
 			_fieldEB2 = 0;
-			_object2.setFrame(1);
+			_hand.setFrame(1);
 		}
 	}
 }
