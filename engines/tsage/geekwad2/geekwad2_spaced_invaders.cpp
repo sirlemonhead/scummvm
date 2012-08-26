@@ -41,66 +41,66 @@ void Scene10::Action1::signal() {
 	if (scene->_fieldEB2 == 1) {
 		scene->_object3.remove();
 		scene->_fieldEB2 = 0;
+	}
 
-		switch (_actionIndex++) {
+	switch (_actionIndex++) {
+	case 0:
+		GW2_GLOBALS._v4708C = 1;
+		scene->_object2.hide();
+		scene->_objectP->setAction(NULL);
+		scene->_objectP->addMover(NULL);
+		scene->_field31E = 1;
+
+		switch (scene->_fieldEC0) {
 		case 0:
-			GW2_GLOBALS._v4708C = 1;
-			scene->_object2.hide();
-			scene->_objectP->setAction(NULL);
-			scene->_objectP->addMover(NULL);
-			scene->_field31E = 1;
-
-			switch (scene->_fieldEC0) {
-			case 0:
-				scene->_sound2.play(101, NULL, 100);
-				GW2_GLOBALS._soundManager.setMasterVol(100);
-				stripNumber = 100;
-				break;
-			case 1:
-				scene->_sound2.play(110, NULL, 100);
-				GW2_GLOBALS._soundManager.setMasterVol(100);
-				stripNumber = 130;
-				break;
-			case 2:
-				scene->_sound2.play(103, NULL, 90);
-				GW2_GLOBALS._soundManager.setMasterVol(100);
-				stripNumber = 150;
-				break;
-			case 3:
-				scene->_sound2.play(104, NULL, 100);
-				GW2_GLOBALS._soundManager.setMasterVol(100);
-				stripNumber = 170;
-				break;
-			case 4:
-				scene->_sound2.play(105, NULL, 100);
-				GW2_GLOBALS._soundManager.setMasterVol(100);
-				stripNumber = 190;
-				break;
-			case 5:
-				scene->_sound2.play(106, NULL, 100);
-				GW2_GLOBALS._soundManager.setMasterVol(100);
-				stripNumber = 210;
-				break;
-			default:
-				scene->_sound2.play(107, NULL, 100);
-				GW2_GLOBALS._soundManager.setMasterVol(100);
-				stripNumber = 230;
-				break;
-			}
-
-			scene->_frameNumber = GW2_GLOBALS._events.getFrameNumber() + 120;
-			scene->_stripManager.start(stripNumber, this);
+			scene->_sound2.play(101, NULL, 100);
+			GW2_GLOBALS._soundManager.setMasterVol(100);
+			stripNumber = 100;
 			break;
-
 		case 1:
-			scene->_field31E = 0;
-			scene->_object2.show();
-			setAction(&scene->_action5);
+			scene->_sound2.play(110, NULL, 100);
+			GW2_GLOBALS._soundManager.setMasterVol(100);
+			stripNumber = 130;
 			break;
-
+		case 2:
+			scene->_sound2.play(103, NULL, 90);
+			GW2_GLOBALS._soundManager.setMasterVol(100);
+			stripNumber = 150;
+			break;
+		case 3:
+			scene->_sound2.play(104, NULL, 100);
+			GW2_GLOBALS._soundManager.setMasterVol(100);
+			stripNumber = 170;
+			break;
+		case 4:
+			scene->_sound2.play(105, NULL, 100);
+			GW2_GLOBALS._soundManager.setMasterVol(100);
+			stripNumber = 190;
+			break;
+		case 5:
+			scene->_sound2.play(106, NULL, 100);
+			GW2_GLOBALS._soundManager.setMasterVol(100);
+			stripNumber = 210;
+			break;
 		default:
+			scene->_sound2.play(107, NULL, 100);
+			GW2_GLOBALS._soundManager.setMasterVol(100);
+			stripNumber = 230;
 			break;
 		}
+
+		scene->_frameNumber = GW2_GLOBALS._events.getFrameNumber() + 120;
+		scene->_stripManager.start(stripNumber, this);
+		break;
+
+	case 1:
+		scene->_field31E = 0;
+		scene->_object2.show();
+		setAction(&scene->_action5);
+		break;
+
+	default:
+		break;
 	}
 }
 
@@ -139,7 +139,7 @@ void Scene10::Action2::signal() {
 			scene->_fieldEB2 = 0;
 		}
 
-		for (int idx = 0; idx < 4; ++idx) {
+		for (int idx = 0; idx < 5; ++idx) {
 			if (scene->_field127A[idx]) {
 				scene->_field127A[idx]->remove();
 				scene->_field127A[idx] = NULL;
@@ -585,7 +585,7 @@ void Scene10::Action7::signal() {
 	}
 
 	case 2: {
-		for (int idx = 0; idx < 4; ++idx) {
+		for (int idx = 0; idx < 5; ++idx) {
 			if (!scene->_field127A[idx]	&& GW2_GLOBALS._sceneObjects->contains(scene->_field127A[idx])) {
 				SceneObject *owner = static_cast<SceneObject *>(_owner);
 				Object *obj = scene->_field127A[idx] = &scene->_objList1[idx];
@@ -638,14 +638,14 @@ Scene10::Scene10(): SceneExt() {
 	_fieldEB4 = 3;
 	_fieldEB6  = 0;
  
-	for (int idx = _fieldEB6; idx < _fieldEB4; ++idx) {
-		for (int idx2 = 0; idx2 < 4; ++idx) {
+	for (int idx = _fieldEB6; idx <= _fieldEB4; ++idx) {
+		for (int idx2 = 0; idx2 < 4; ++idx2) {
 			_field1C2E[idx][idx2] = &_objList2[idx][idx2];
 			_field128E[idx][idx2] = 1;
 		}
 	}
 	
-	for (int idx = 0; idx < 4; ++idx)
+	for (int idx = 0; idx < 5; ++idx)
 		_field127A[idx] = 0;
 
 	_rect1.set(50, 200, 270, 200);
@@ -764,7 +764,7 @@ void Scene10::dispatch() {
 
 		if (_fieldEBC == 1) {
 			if (!_field319C && _objectP->_field8E == 1) {
-				for (int idx = 0; idx < 4; ++idx) {
+				for (int idx = 0; idx < 5; ++idx) {
 					if (_field127A[idx])
 						found = true;
 				}
@@ -787,7 +787,7 @@ void Scene10::dispatch() {
 				proc1();
 			}
 
-			for (int idx = 0; idx < 4; ++idx) {
+			for (int idx = 0; idx < 5; ++idx) {
 				if (_field127A[idx]) {
 					if (_field127A[idx]->_action) {
 						_field127A[idx]->_flags |= OBJFLAG_PANES;
@@ -924,7 +924,7 @@ void Scene10::setupAction() {
 void Scene10::resetGame() {
 	_field31E = 1;
 	
-	for (int idx = _fieldEB6; idx < _fieldEB4; ++idx) {
+	for (int idx = _fieldEB6; idx <= _fieldEB4; ++idx) {
 		for (int idx2 = 0; idx2 < 4; ++idx) {
 			if (_field1C2E[idx][idx2]) {
 				_field1C2E[idx][idx2]->remove();
@@ -943,7 +943,7 @@ void Scene10::resetGame() {
 		_fieldEB2 = 0;
 	}
 
-	for (int idx = 0; idx < 4; ++idx) {
+	for (int idx = 0; idx < 5; ++idx) {
 		if (_field127A[idx]) {
 			_field127A[idx]->remove();
 			_field127A[idx] = NULL;

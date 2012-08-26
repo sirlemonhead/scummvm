@@ -198,7 +198,7 @@ void SpeakerGran::proc12(Action *action) {
 	VisualSpeaker::proc12(action);
 
 	GW2_GLOBALS._scenePalette.loadPalette(8010);
-	if (GW2_GLOBALS._sceneManager._hasPalette)
+	if (!GW2_GLOBALS._sceneManager._hasPalette)
 		GW2_GLOBALS._scenePalette.refresh();
 
 	_removeObject1 = true;

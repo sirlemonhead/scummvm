@@ -35,7 +35,7 @@ namespace Geekwad2 {
 void Geekwad2Game::start() {
 	// Start the game
 //	g_globals->_sceneManager.changeScene(150);
-	g_globals->_sceneManager.changeScene(20);
+	g_globals->_sceneManager.changeScene(10);
 }
 
 Scene *Geekwad2Game::createScene(int sceneNumber) {
