@@ -23,7 +23,7 @@
 #include "tsage/scenes.h"
 #include "tsage/tsage.h"
 #include "tsage/staticres.h"
-#include "tsage/geekwad2/geekwad2_spaced_invaders.h"
+#include "tsage/geekwad2/geekwad2_spaced_solicitors.h"
 
 namespace TsAGE {
 

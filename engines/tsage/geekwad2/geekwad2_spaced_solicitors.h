@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef TSAGE_GEEKWAD2_SPACED_INVADERS_H
-#define TSAGE_GEEKWAD2_SPACED_INVADERS_H
+#ifndef TSAGE_GEEKWAD2_SPACED_SOLICITORS_H
+#define TSAGE_GEEKWAD2_SPACED_SOLICITORS_H
 
 #include "common/scummsys.h"
 #include "tsage/converse.h"
