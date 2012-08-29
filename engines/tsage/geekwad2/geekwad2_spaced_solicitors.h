@@ -85,7 +85,7 @@ private:
 	void setupScore();
 	void setupAction();
 	void resetGame();
-	void proc1();
+	void checkCoinCollision();
 	void proc2(int v);
 	void proc3();
 
@@ -99,23 +99,23 @@ public:
 	SpeakerGameText _gameTextSpeaker;
 	Action1 _action1;
 	Action2 _action2;
-	int _field772;
+	bool _spacePressed;
 	ASound _sound1, _sound2;
-	SceneObject _object1, _hand, _object3, _object4;
-	int _fieldEB0, _fieldEB2, _fieldEB4, _fieldEB6, _fieldEB8;
+	SceneObject _object1, _hand, _coin, _object4;
+	int _fieldEB0, _coinActive, _fieldEB4, _fieldEB6, _fieldEB8;
 	int _fieldEBA, _fieldEBC, _fieldEBE, _fieldEC0;
 	int _fieldEC2, _fieldEC4, _fieldEC6, _fieldEC8;
 	int _fieldECA, _fieldECC;
 	Rect _rect1, _rect2;
-	Object _object5;
+	Object _bus;
 	int _fieldF74;
 
 	Object *_objectP;
 	Object _objList1[5];
 	Object *_field127A[5];
-	int _field128E[4][4];
+	bool _girlScoutPresent[4][4];
 	Object _objList2[4][4];
-	Object *_field1C2E[4][4];
+	Object *_girlScouts[4][4];
 
 	Action6 _action6;
 	Action7 _actionList1[16];
@@ -128,7 +128,7 @@ public:
 	BackgroundTextualObject _obj5, _obj6, _obj7;
 	ASound _sound3, _sound4, _sound5;
 	ASound _sound6, _sound7;
-	int _field319A, _field319C;
+	int _field319A, _totalGirls;
 	Action3 _action3;
 	Action4 _action4[5];
 	Action5 _action5;

@@ -38,9 +38,9 @@ void Scene10::Action1::signal() {
 	Scene10 *scene = (Scene10 *)GW2_GLOBALS._sceneManager._scene;
 	int stripNumber;
 
-	if (scene->_fieldEB2 == 1) {
-		scene->_object3.remove();
-		scene->_fieldEB2 = 0;
+	if (scene->_coinActive) {
+		scene->_coin.remove();
+		scene->_coinActive = false;
 	}
 
 	switch (_actionIndex++) {
@@ -108,9 +108,9 @@ void Scene10::Action2::signal() {
 	Scene10 *scene = (Scene10 *)GW2_GLOBALS._sceneManager._scene;
 
 	scene->_fieldEBC = 0;
-	if (scene->_fieldEB2 == 1) {
-		scene->_object3.remove();
-		scene->_fieldEB2 = 0;
+	if (scene->_coinActive) {
+		scene->_coin.remove();
+		scene->_coinActive = false;
 	}
 
 	switch (_actionIndex) {
@@ -122,9 +122,9 @@ void Scene10::Action2::signal() {
 		
 		for (int idx = scene->_fieldEB4; idx <= scene->_fieldEB6; ++idx) {
 			for (int idx2 = 0; idx2 < 4; ++idx) {
-				if (scene->_field1C2E[idx][idx2]) {
-					scene->_field1C2E[idx][idx2]->remove();
-					scene->_field128E[idx][idx2] = 0;
+				if (scene->_girlScouts[idx][idx2]) {
+					scene->_girlScouts[idx][idx2]->remove();
+					scene->_girlScoutPresent[idx][idx2] = false;
 				}
 			}
 		}
@@ -134,9 +134,9 @@ void Scene10::Action2::signal() {
 		scene->_objectP->setAction(NULL);
 		scene->_objectP->addMover(NULL);
 
-		if (scene->_fieldEB2 == 1) {
-			scene->_object3.remove();
-			scene->_fieldEB2 = 0;
+		if (scene->_coinActive) {
+			scene->_coin.remove();
+			scene->_coinActive = false;
 		}
 
 		for (int idx = 0; idx < 5; ++idx) {
@@ -292,10 +292,11 @@ void Scene10::Action5::signal() {
 
 	switch (_actionIndex++) {
 	case 0:
+		// Start initial bus moving across the top of the screen
 		GW2_GLOBALS._v4708C = 0;
-		if (scene->_fieldEB2 == 1) {
-			scene->_object3.remove();
-			scene->_fieldEB2 = 0;
+		if (scene->_coinActive) {
+			scene->_coin.remove();
+			scene->_coinActive = false;
 		}
 		
 		scene->_fieldECC = 1;
@@ -377,19 +378,21 @@ void Scene10::Action5::signal() {
 		break;
 
 	case 1:
+		// Bus door opening
 		scene->_objectP->setFrame2(2);
 		setDelay(30);
 		break;
 
 	case 2:
+		// Girl scouts coming out
 		scene->_objectP->setFrame2(1);
 		ADD_MOVER((*scene->_objectP), 350, 23);
 
-		for (int idx = scene->_fieldEB4; idx <= scene->_fieldEB6; ++idx) {
+		for (int idx = scene->_fieldEB4; idx >= scene->_fieldEB6; --idx) {
 			for (int idx2 = 0; idx2 < 4; ++idx2) {
-				Object *obj = scene->_field1C2E[idx2][idx];
+				Object *obj = scene->_girlScouts[idx2][idx];
 				obj->postInit();
-				scene->_field128E[idx2][idx] = 1;
+				scene->_girlScoutPresent[idx2][idx] = true;
 				obj->setVisage(140);
 				obj->animate(ANIM_MODE_2, NULL);
 
@@ -406,24 +409,25 @@ void Scene10::Action5::signal() {
 			}
 		}
 		
-		ADD_MOVER_NULL((*scene->_field1C2E[0][0]), 60, 120);
-		ADD_MOVER_NULL((*scene->_field1C2E[0][1]), 60, 90);
-		ADD_MOVER_NULL((*scene->_field1C2E[0][2]), 60, 60);
-		ADD_MOVER_NULL((*scene->_field1C2E[0][3]), 60, 30);
-		ADD_MOVER_NULL((*scene->_field1C2E[1][0]), 130, 120);
-		ADD_MOVER_NULL((*scene->_field1C2E[1][1]), 130, 90);
-		ADD_MOVER_NULL((*scene->_field1C2E[1][2]), 130, 60);
-		ADD_MOVER_NULL((*scene->_field1C2E[1][3]), 130, 30);
-		ADD_MOVER_NULL((*scene->_field1C2E[2][0]), 190, 120);
-		ADD_MOVER_NULL((*scene->_field1C2E[2][1]), 190, 90);
-		ADD_MOVER_NULL((*scene->_field1C2E[2][2]), 190, 60);
-		ADD_MOVER_NULL((*scene->_field1C2E[2][3]), 190, 30);
-		ADD_MOVER_NULL((*scene->_field1C2E[3][0]), 260, 120);
-		ADD_MOVER_NULL((*scene->_field1C2E[3][1]), 260, 90);
-		ADD_MOVER_NULL((*scene->_field1C2E[3][2]), 260, 60);
-		ADD_MOVER_NULL((*scene->_field1C2E[3][3]), 260, 30);
+		// Set the positions to move the girl scouts to
+		ADD_MOVER_NULL((*scene->_girlScouts[0][0]), 60, 120);
+		ADD_MOVER_NULL((*scene->_girlScouts[0][1]), 60, 90);
+		ADD_MOVER_NULL((*scene->_girlScouts[0][2]), 60, 60);
+		ADD_MOVER_NULL((*scene->_girlScouts[0][3]), 60, 30);
+		ADD_MOVER_NULL((*scene->_girlScouts[1][0]), 130, 120);
+		ADD_MOVER_NULL((*scene->_girlScouts[1][1]), 130, 90);
+		ADD_MOVER_NULL((*scene->_girlScouts[1][2]), 130, 60);
+		ADD_MOVER_NULL((*scene->_girlScouts[1][3]), 130, 30);
+		ADD_MOVER_NULL((*scene->_girlScouts[2][0]), 190, 120);
+		ADD_MOVER_NULL((*scene->_girlScouts[2][1]), 190, 90);
+		ADD_MOVER_NULL((*scene->_girlScouts[2][2]), 190, 60);
+		ADD_MOVER_NULL((*scene->_girlScouts[2][3]), 190, 30);
+		ADD_MOVER_NULL((*scene->_girlScouts[3][0]), 260, 120);
+		ADD_MOVER_NULL((*scene->_girlScouts[3][1]), 260, 90);
+		ADD_MOVER_NULL((*scene->_girlScouts[3][2]), 260, 60);
+		ADD_MOVER_NULL((*scene->_girlScouts[3][3]), 260, 30);
 		
-		scene->_field319C = 16;
+		scene->_totalGirls = 16;
 		break;
 
 	case 3:
@@ -431,7 +435,7 @@ void Scene10::Action5::signal() {
 		scene->_objectP->_field8E = 1;
 		scene->_field31E = 0;
 		scene->_fieldEBC = 1;
-		scene->_field772 = 0;
+		scene->_spacePressed = false;
 		scene->_objectP->setAction(&scene->_action6);
 
 		remove();
@@ -472,30 +476,30 @@ void Scene10::Action6::signal() {
 		break;
 
 	case 2:
-		if ((scene->_field319C > 0) && (scene->_fieldEBC == 1) && (scene->_objectP->_field8E == 0) &&
+		if ((scene->_totalGirls > 0) && (scene->_fieldEBC == 1) && (scene->_objectP->_field8E == 0) &&
 				(scene->_fieldEC4 == 1)) {
 			bool flag = false;
 			int idx;
 			for (idx = 0; idx < 4; ++idx) {
-				if (!scene->_field128E[0][0] && !scene->_field128E[1][0] &&
-					!scene->_field128E[2][0] && !scene->_field128E[3][0]) {
+				if (!scene->_girlScoutPresent[0][0] && !scene->_girlScoutPresent[1][0] &&
+					!scene->_girlScoutPresent[2][0] && !scene->_girlScoutPresent[3][0]) {
 					flag = true;
 					break;
 				}
 			}
 
-			if (flag && !scene->_field1C2E[0][idx] && !scene->_field1C2E[1][idx] 
-					&& !scene->_field1C2E[2][idx] && !scene->_field1C2E[3][idx]) {
+			if (flag && !scene->_girlScouts[0][idx] && !scene->_girlScouts[1][idx] 
+					&& !scene->_girlScouts[2][idx] && !scene->_girlScouts[3][idx]) {
 				// Increment frame					
 				scene->_objectP->setFrame2(scene->_objectP->_frame + 1);
 
 				// Loop
 				for (int idx = scene->_fieldEB4; idx <= scene->_fieldEB6; ++idx) {
 					for (int idx2 = 0; idx2 < 4; ++idx) {
-						Object *obj = scene->_field1C2E[idx][idx2];
+						Object *obj = scene->_girlScouts[idx][idx2];
 
-						if (scene->_field128E[idx][idx2] && obj->_position.y < 170) {
-							scene->_field128E[idx][idx2] = 1;
+						if (scene->_girlScoutPresent[idx][idx2] && obj->_position.y < 170) {
+							scene->_girlScoutPresent[idx][idx2] = true;
 
 							obj->postInit();
 							obj->setVisage(140);
@@ -633,15 +637,15 @@ Scene10::Scene10(): SceneExt() {
 	_field30A = 0;
 	_frameNumber = 0;
 	_field30C = 0;
-	_field772 = 0;
-	_fieldEB2 = 0;
+	_spacePressed = false;
+	_coinActive = false;
 	_fieldEB4 = 3;
 	_fieldEB6  = 0;
  
 	for (int idx = _fieldEB6; idx <= _fieldEB4; ++idx) {
 		for (int idx2 = 0; idx2 < 4; ++idx2) {
-			_field1C2E[idx][idx2] = &_objList2[idx][idx2];
-			_field128E[idx][idx2] = 1;
+			_girlScouts[idx][idx2] = &_objList2[idx][idx2];
+			_girlScoutPresent[idx][idx2] = true;
 		}
 	}
 	
@@ -658,7 +662,7 @@ void Scene10::postInit(SceneObjectList *OwnerList) {
 	setZoomPercents(20, 1, 30, 100);
 	loadScene(10);
 
-	_objectP = &_object5;
+	_objectP = &_bus;
 	_objectP->postInit();
 	_objectP->setVisage(110);
 	_objectP->setStrip(1);
@@ -685,14 +689,12 @@ void Scene10::postInit(SceneObjectList *OwnerList) {
 	_stripManager.addSpeaker(&_gameTextSpeaker);
 
 	reset();
-	GW2_GLOBALS._events.addTimer(&timer, 70);
 }
 
 void Scene10::remove() {
 	GW2_GLOBALS._soundManager.setMasterVol(100);
 	GW2_GLOBALS._v4708C = 1;
 
-	GW2_GLOBALS._events.removeTimer(&timer);
 	Scene::remove();
 }
 
@@ -706,19 +708,19 @@ void Scene10::process(Event &event) {
 		case EVENT_BUTTON_DOWN:
 			event.eventType = EVENT_NONE;
 			event.handled = true;
-			if ((_fieldEBC == 1) && !_hand._action && (_fieldEB2 != 1) &&
-					!GW2_GLOBALS._sceneObjects->contains(&_object3)) {
+			if ((_fieldEBC == 1) && !_hand._action && !_coinActive && !GW2_GLOBALS._sceneObjects->contains(&_coin)) {
+				// Start throwing a coin
 				_sound7.play(110);
 				_hand.animate(ANIM_MODE_5, NULL);
 				
-				_object3.postInit();
-				_object3.setVisage(100);
-				_object3.setStrip(2);
-				_object3.setFrame(1);
-				_object3.fixPriority(253);
-				_object3.setPosition(Common::Point(_hand._position.x, _hand._position.y - 30));
-				_object3.animate(ANIM_MODE_2, NULL);
-				_fieldEB2 = 1;
+				_coin.postInit();
+				_coin.setVisage(100);
+				_coin.setStrip(2);
+				_coin.setFrame(1);
+				_coin.fixPriority(253);
+				_coin.setPosition(Common::Point(_hand._position.x, _hand._position.y - 30));
+				_coin.animate(ANIM_MODE_2, NULL);
+				_coinActive = true;
 			}
 			GW2_GLOBALS._events.waitForPress(EVENT_BUTTON_UP);
 			break;
@@ -732,6 +734,10 @@ void Scene10::process(Event &event) {
 					_field30C = 1;
 					setAction(&_action2);
 				}
+				break;
+
+			case Common::KEYCODE_SPACE:
+				_spacePressed = true;
 				break;
 
 			case 'A':
@@ -766,28 +772,28 @@ void Scene10::dispatch() {
 		_objectP->_flags |= OBJFLAG_PANES;
 
 		if (_fieldEBC == 1) {
-			if (!_field319C && _objectP->_field8E == 1) {
+			if (_totalGirls == 0 && _objectP->_field8E == 1) {
 				for (int idx = 0; idx < 5; ++idx) {
 					if (_field127A[idx])
 						found = true;
 				}
 
 				if (!found) {
-					if (_fieldEB2 == 1) {
-						_object3.remove();
-						_fieldEB2 = 0;
+					if (_coinActive) {
+						_coin.remove();
+						_coinActive = false;
 					}
 
 					_fieldEBC = 0;
 					setupAction();
-					_field772 = 0;
+					_spacePressed = false;
 				}
 			}
 
-			if (_fieldEB2 == 1) {
-				_object3.setPosition(Common::Point(_object3._position.x, _object3._position.y - 10));
-				_object3.setZoom(MAX(_object3._percent - 5, 5));
-				proc1();
+			if (_coinActive) {
+				_coin.setPosition(Common::Point(_coin._position.x, _coin._position.y - 10));
+				_coin.setZoom(MAX(_coin._percent - 5, 5));
+				checkCoinCollision();
 			}
 
 			for (int idx = 0; idx < 5; ++idx) {
@@ -816,9 +822,9 @@ void Scene10::dispatch() {
 
 			for (int idx = _fieldEB4; idx <= _fieldEB6; ++idx) {
 				for (int idx2 = 0; idx < 4; ++idx2) {
-					if (_field128E[idx2] && _field1C2E[idx][idx2]->_position.y >= 200) {
-						_field1C2E[idx][idx2]->remove();
-						_field128E[idx][idx2] = 0;
+					if (_girlScoutPresent[idx2] && _girlScouts[idx][idx2]->_position.y >= 200) {
+						_girlScouts[idx][idx2]->remove();
+						_girlScoutPresent[idx][idx2] = false;
 
 						// TODO: Figure out floating point logic
 						double v1 = _fieldEB0 / 100;
@@ -828,13 +834,35 @@ void Scene10::dispatch() {
 						if (v2 < v1)
 							GW2_GLOBALS._soundManager.setMasterVol(GW2_GLOBALS._soundManager.getMasterVol() + 20);
 
-						proc2(_field319C);
+						proc2(_totalGirls);
 						_hand._flags |= OBJFLAG_PANES;
 
 						proc3();
 					}
 				}
 			}
+
+			// Check for firing a new coin
+			if (_spacePressed && (_totalGirls > 0 || !_objectP->_field8E) && _fieldEBC == 1 && !_hand._action 
+						&& !_coinActive && !GLOBALS._sceneObjects->contains(&_coin)) {
+				// Start throwing a coin
+				_sound7.play(110);
+				_hand.animate(ANIM_MODE_5, NULL);
+
+				_coin.postInit();
+				_coin.setVisage(100);
+				_coin.setStrip(2);
+				_coin.setFrame(1);
+				_coin.fixPriority(253);
+				_coin.changeZoom(100);
+				_coin.setPosition(Common::Point(_hand._position.x, _hand._position.y - 30));
+				_coin.reposition();
+				_coin.animate(ANIM_MODE_2, NULL);
+
+				_coinActive = true;
+			}
+
+			_spacePressed = false;
 		}
 
 		// Update hand position
@@ -870,7 +898,7 @@ void Scene10::reset() {
 	_field2022 = 0;
 	_fieldEC8 = 100;
 	_fieldECA = 20;
-	_field319C = 0;
+	_totalGirls = 0;
 	_currentScore = 0;
 	
 	setupScore();
@@ -913,9 +941,9 @@ void Scene10::setupScore() {
 
 void Scene10::setupAction() {
 	++_fieldEC0;
-	if (_fieldEB2 == 1) {
-		_object3.remove();
-		_fieldEB2 = 0;
+	if (_coinActive) {
+		_coin.remove();
+		_coinActive = false;
 	}
 
 	if ((_fieldEC0 % 2) == 0)
@@ -929,9 +957,9 @@ void Scene10::resetGame() {
 	
 	for (int idx = _fieldEB4; idx >= _fieldEB6; --idx) {
 		for (int idx2 = 0; idx2 < 4; ++idx2) {
-			if (_field1C2E[idx][idx2]) {
-				_field1C2E[idx][idx2]->remove();
-				_field128E[idx][idx2] = 0;
+			if (_girlScouts[idx][idx2]) {
+				_girlScouts[idx][idx2]->remove();
+				_girlScoutPresent[idx][idx2] = false;
 			}
 		}
 	}
@@ -941,9 +969,9 @@ void Scene10::resetGame() {
 	_objectP->setAction(NULL);
 	_objectP->addMover(NULL);
 
-	if (!_fieldEB2) {
-		_object3.remove();
-		_fieldEB2 = 0;
+	if (_coinActive) {
+		_coin.remove();
+		_coinActive = false;
 	}
 
 	for (int idx = 0; idx < 5; ++idx) {
@@ -963,7 +991,7 @@ void Scene10::resetGame() {
 	_field2022 = 0;
 	_fieldEC8 = 400;
 	_fieldECA = 8;
-	_field319C = 0;
+	_totalGirls = 0;
 
 	_currentScore = 20000;
 	setupScore();
@@ -984,30 +1012,23 @@ void Scene10::resetGame() {
 	setupAction();
 }
 
-void Scene10::timer() {
-	Scene10 *scene = (Scene10 *)GW2_GLOBALS._sceneManager._scene;
-
-	if (scene->isKeyPressed(Common::KEYCODE_SPACE))
-		scene->_field772 = 1;
-}
-
-void Scene10::proc1() {
+void Scene10::checkCoinCollision() {
 	bool breakFlag = false;
 
 	for (int idx = _fieldEB4; idx <= _fieldEB6; ++idx) {
 		for (int idx2 = 0; idx2 < 4; ++idx2) {
-			if (_field128E[idx][idx2] && _field1C2E[idx][idx2]->_bounds.intersects(_object3._bounds)) {
+			if (_girlScoutPresent[idx][idx2] && _girlScouts[idx][idx2]->_bounds.intersects(_coin._bounds)) {
 				breakFlag = true;
-				_object4.setPosition(_field1C2E[idx][idx2]->_position);
+				_object4.setPosition(_girlScouts[idx][idx2]->_position);
 				_object4._strip = 2;
 				_object4._frame = 1;
 				_object4.animate(ANIM_MODE_5, NULL);
-				_field1C2E[idx][idx2]->remove();
-				_field128E[idx][idx2] = 0;
+				_girlScouts[idx][idx2]->remove();
+				_girlScoutPresent[idx][idx2] = false;
 
-				_object3.remove();
+				_coin.remove();
 
-				_fieldEB2 = 0;
+				_coinActive = false;
 				_fieldEBA -= 5;
 				_hand.setFrame(1);
 
@@ -1051,10 +1072,10 @@ void Scene10::proc1() {
 					}
 				}
 
-				--_field319C;
+				--_totalGirls;
 				bool flag = false;
 				for (int idx3 = _fieldEB4; idx3 >= _fieldEB6 && !flag; --idx3) {
-					if (_field128E[idx3][idx2])
+					if (_girlScoutPresent[idx3][idx2])
 						flag = true;
 				}
 
@@ -1062,19 +1083,19 @@ void Scene10::proc1() {
 					// Rotate the object list
 					Object *objList[4];
 					for (int idx3 = _fieldEB4; idx3 >= _fieldEB6 && !flag; --idx3) {
-						objList[idx3] = _field1C2E[idx3][idx2];
+						objList[idx3] = _girlScouts[idx3][idx2];
 					}
 
 					for (int idx3 = idx2; idx3 <= 2; ++idx3) {
 						for (int idx4 = _fieldEB4; idx4 >= _fieldEB6; --idx4) {
-							_field128E[idx4][idx3] = _field128E[idx4][idx3 + 1];
-							_field1C2E[idx4][idx3] = _field1C2E[idx4][idx3 + 1];
+							_girlScoutPresent[idx4][idx3] = _girlScoutPresent[idx4][idx3 + 1];
+							_girlScouts[idx4][idx3] = _girlScouts[idx4][idx3 + 1];
 						}
 					}
 
 					for (int idx3 = _fieldEB4; idx3 >= _fieldEB6 && !flag; --idx3) {
-						_field1C2E[idx3][3] = objList[idx3];
-						_field128E[idx3][3] = 0;
+						_girlScouts[idx3][3] = objList[idx3];
+						_girlScoutPresent[idx3][3] = false;
 					}
 				}
 
@@ -1086,8 +1107,8 @@ void Scene10::proc1() {
 			break;
 	}
 
-	if (_fieldEB2 == 1) {
-		if (!_objectP->_field8E && _object3._bounds.intersects(_objectP->_bounds)) {
+	if (_coinActive) {
+		if (!_objectP->_field8E && _coin._bounds.intersects(_objectP->_bounds)) {
 			_object4.setPosition(_objectP->_position);
 			_object4._strip = 1;
 			_object4._frame = 1;
@@ -1129,9 +1150,9 @@ void Scene10::proc1() {
 			}
 		}
 
-		if (_object3._position.y < 10) {
-			_object3.remove();
-			_fieldEB2 = 0;
+		if (_coin._position.y < 10) {
+			_coin.remove();
+			_coinActive = false;
 			_hand.setFrame(1);
 		}
 	}
