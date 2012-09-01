@@ -431,6 +431,7 @@ void Scene10::Action5::signal() {
 		break;
 
 	case 3:
+		// Bus has left the top of the screen, so time to start the girl scout movement action
 		scene->_objectP->hide();
 		scene->_objectP->_field8E = 1;
 		scene->_field31E = 0;
@@ -840,6 +841,101 @@ void Scene10::dispatch() {
 						proc3();
 					}
 				}
+			}
+
+			// Handle moving the girl scouts left and right
+			if (_fieldECC) {
+				for (int idx = _fieldEB4; idx >= _fieldEB6; --idx) {
+					for (int idx2 = 0; idx2 < 4; ++idx2) {
+						if (_girlScoutPresent[idx][idx2]) {
+							if (_girlScouts[idx][idx2]->_position.y >= 170) {
+								_girlScouts[idx][idx2]->setPosition(Common::Point(_girlScouts[idx][idx2]->_position.x,
+									_girlScouts[idx][idx2]->_position.y + 3));
+							} else {
+								if (_girlScouts[idx][idx2]->_position.x >= 300)
+									_fieldECC = 0;
+
+								_girlScouts[idx][idx2]->setPosition(Common::Point(
+									_girlScouts[idx][idx2]->_position.x + _fieldEB0 / 100,
+									_girlScouts[idx][idx2]->_position.y));
+							}
+						}
+					}
+				}
+
+				if (!_fieldECC) {
+					int foundIndex = -1;
+					for (int idx2 = 0; idx2 < 4; ++idx2) {
+						for (int idx = _fieldEB4; idx >= _fieldEB6; --idx) {
+							if (_girlScoutPresent[idx][idx2]) {
+								foundIndex = idx2;
+								break;
+							}
+						}
+
+						if (foundIndex != -1)
+							break;
+					}
+
+					for (int idx = _fieldEB4; idx >= _fieldEB6; --idx) {
+						for (int idx2 = 0; idx2 < 4; ++idx2) {
+							if (_girlScoutPresent[idx][idx2]) {
+								_girlScouts[idx][idx2]->setPosition(Common::Point(_girlScouts[idx][idx2]->_position.x,
+									_girlScouts[idx][idx2]->_position.y + 5));
+
+								if ((idx2 == foundIndex) && !_girlScouts[idx][idx2]->_action) {
+									_girlScouts[idx][idx2]->setAction(&_actionList1[idx][idx2]);
+								}
+							}
+						}
+					}
+				}
+			} else {
+				for (int idx = _fieldEB6; idx <= _fieldEB4; ++idx) {
+					for (int idx2 = 0; idx2 < 4; ++idx2) {
+						if (_girlScoutPresent[idx][idx2]) {
+							if (_girlScouts[idx][idx2]->_position.y >= 170) {
+								_girlScouts[idx][idx2]->setPosition(Common::Point(_girlScouts[idx][idx2]->_position.x,
+									_girlScouts[idx][idx2]->_position.y + 3));
+							} else {
+								if (_girlScouts[idx][idx2]->_position.x <= 20)
+									_fieldECC = 1;
+
+								_girlScouts[idx][idx2]->setPosition(Common::Point(
+									_girlScouts[idx][idx2]->_position.x - _fieldEB0 / 100,
+									_girlScouts[idx][idx2]->_position.y));
+							}
+						}
+					}
+				}
+
+				if (_fieldECC) {
+					int foundIndex = -1;
+					for (int idx2 = 0; idx2 < 4; ++idx2) {
+						for (int idx = _fieldEB4; idx >= _fieldEB6; --idx) {
+							if (_girlScoutPresent[idx][idx2]) {
+								foundIndex = idx2;
+								break;
+							}
+						}
+
+						if (foundIndex != -1)
+							break;
+					}
+
+					for (int idx = _fieldEB4; idx >= _fieldEB6; --idx) {
+						for (int idx2 = 0; idx2 < 4; ++idx2) {
+							if (_girlScoutPresent[idx][idx2]) {
+								_girlScouts[idx][idx2]->setPosition(Common::Point(_girlScouts[idx][idx2]->_position.x,
+									_girlScouts[idx][idx2]->_position.y + 5));
+
+								if ((idx2 == foundIndex) && !_girlScouts[idx][idx2]->_action) {
+									_girlScouts[idx][idx2]->setAction(&_actionList1[idx][idx2]);
+								}
+							}
+						}
+					}
+				}				
 			}
 
 			// Check for firing a new coin

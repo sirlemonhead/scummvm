@@ -118,8 +118,8 @@ public:
 	Object *_girlScouts[4][4];
 
 	Action6 _action6;
-	Action7 _actionList1[16];
-	Action8 _actionList2[16];
+	Action7 _actionList1[4][4];
+	Action8 _actionList2[4][4];
 	Common::String _numberBuffer;
 	uint32 _currentScore;
 	int _field2022;
