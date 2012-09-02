@@ -679,12 +679,12 @@ void Scene10::postInit(SceneObjectList *OwnerList) {
 	_hand.setPosition(Common::Point(160, 199));
 	_hand.hide();
 
-	_object4.postInit();
-	_object4.setVisage(160);
-	_object4.setStrip(1);
-	_object4.setFrame(_object4.getFrameCount());
-	_object4.fixPriority(90);
-	_object4.setPosition(Common::Point(1, 1));
+	_explosion.postInit();
+	_explosion.setVisage(160);
+	_explosion.setStrip(1);
+	_explosion.setFrame(_explosion.getFrameCount());
+	_explosion.fixPriority(90);
+	_explosion.setPosition(Common::Point(1, 1));
 	
 	_stripManager.addSpeaker(&_granSpeaker);
 	_stripManager.addSpeaker(&_gameTextSpeaker);
@@ -727,7 +727,7 @@ void Scene10::process(Event &event) {
 			break;
 
 		case EVENT_KEYPRESS:
-			switch (event.kbd.ascii) {
+			switch (event.kbd.keycode) {
 			case Common::KEYCODE_ESCAPE:
 				event.handled = true;
 				if (((Geekwad2Game *)GW2_GLOBALS._game)->showPauseDialog() != 0) {
@@ -741,8 +741,19 @@ void Scene10::process(Event &event) {
 				_spacePressed = true;
 				break;
 
-			case 'A':
-			case 'a':
+			case Common::KEYCODE_LEFT:
+			case Common::KEYCODE_KP4:
+				if (_hand._position.x >= 55)
+					_hand._position.x -= 10;
+				break;
+
+			case Common::KEYCODE_RIGHT:
+			case Common::KEYCODE_KP6:
+				if (_hand._position.x <= 265)
+					_hand._position.x += 10;
+				break;
+
+			case Common::KEYCODE_a:
 				resetGame();
 				event.handled = true;
 				break;
@@ -960,15 +971,6 @@ void Scene10::dispatch() {
 
 			_spacePressed = false;
 		}
-
-		// Update hand position
-		if (isKeyPressed(Common::KEYCODE_LEFT)) {
-			if (_hand._position.x <= 265)
-				_hand._position.x += 10;
-		} else if (isKeyPressed(Common::KEYCODE_RIGHT)) {
-			if (_hand._position.x >= 55)
-				_hand._position.x -= 10;
-		}
 	}
 
 	Scene::dispatch();
@@ -1111,14 +1113,14 @@ void Scene10::resetGame() {
 void Scene10::checkCoinCollision() {
 	bool breakFlag = false;
 
-	for (int idx = _fieldEB4; idx <= _fieldEB6; ++idx) {
+	for (int idx = _fieldEB4; idx >= _fieldEB6; --idx) {
 		for (int idx2 = 0; idx2 < 4; ++idx2) {
 			if (_girlScoutPresent[idx][idx2] && _girlScouts[idx][idx2]->_bounds.intersects(_coin._bounds)) {
 				breakFlag = true;
-				_object4.setPosition(_girlScouts[idx][idx2]->_position);
-				_object4._strip = 2;
-				_object4._frame = 1;
-				_object4.animate(ANIM_MODE_5, NULL);
+				_explosion.setPosition(_girlScouts[idx][idx2]->_position);
+				_explosion._strip = 2;
+				_explosion._frame = 1;
+				_explosion.animate(ANIM_MODE_5, NULL);
 				_girlScouts[idx][idx2]->remove();
 				_girlScoutPresent[idx][idx2] = false;
 
@@ -1199,16 +1201,16 @@ void Scene10::checkCoinCollision() {
 			}
 		}
 
-		if (!breakFlag)
+		if (breakFlag)
 			break;
 	}
 
 	if (_coinActive) {
 		if (!_objectP->_field8E && _coin._bounds.intersects(_objectP->_bounds)) {
-			_object4.setPosition(_objectP->_position);
-			_object4._strip = 1;
-			_object4._frame = 1;
-			_object4.animate(ANIM_MODE_5, NULL);
+			_explosion.setPosition(_objectP->_position);
+			_explosion._strip = 1;
+			_explosion._frame = 1;
+			_explosion.animate(ANIM_MODE_5, NULL);
 
 			_sound5.play(114);
 			_objectP->hide();

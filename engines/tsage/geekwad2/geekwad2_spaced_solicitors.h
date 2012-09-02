@@ -101,7 +101,7 @@ public:
 	Action2 _action2;
 	bool _spacePressed;
 	ASound _sound1, _sound2;
-	SceneObject _object1, _hand, _coin, _object4;
+	SceneObject _object1, _hand, _coin, _explosion;
 	int _fieldEB0, _coinActive, _fieldEB4, _fieldEB6, _fieldEB8;
 	int _fieldEBA, _fieldEBC, _fieldEBE, _fieldEC0;
 	int _fieldEC2, _fieldEC4, _fieldEC6, _fieldEC8;
