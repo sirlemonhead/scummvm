@@ -712,6 +712,10 @@ void Scene10::process(Event &event) {
 	if (!_field31E) {
 		switch (event.eventType) {
 		case EVENT_MOUSE_MOVE:
+			// Show the cursor if it's been hidden
+			if (!GW2_GLOBALS._events.isCursorVisible())
+				GW2_GLOBALS._events.showCursor();
+
 			_hand.setPosition(Common::Point(CLIP(GW2_GLOBALS._events._mousePos.x, (int16)45, (int16)274), 199));
 			break;
 
@@ -736,6 +740,10 @@ void Scene10::process(Event &event) {
 			break;
 
 		case EVENT_KEYPRESS:
+			// Hide the mouse if the user has started using the keyboard
+			if (GW2_GLOBALS._events.isCursorVisible())
+				GW2_GLOBALS._events.hideCursor();
+
 			switch (event.kbd.keycode) {
 			case Common::KEYCODE_ESCAPE:
 				event.handled = true;
