@@ -528,21 +528,28 @@ void Scene10::Action6::signal() {
 					}
 				}
 			}	
-
-			setDelay(1);
-			_actionIndex = 3;
 		}
+
+		setDelay(1);
+		_actionIndex = 3;
 		break;
 
 	case 3:
 		if (scene->_fieldEBC == 1) {
 			switch (scene->_objectP->_frame) {
 			case 1:
+				ADD_MOVER((*scene->_objectP), 340, 23);
+				break;
+
 			case 2:
 				scene->_objectP->setFrame2(1);
 				ADD_MOVER((*scene->_objectP), 340, 23);
 				break;
+
 			case 3:
+				ADD_MOVER((*scene->_objectP), 0, 23);
+				break;
+
 			case 4:
 				scene->_objectP->setFrame2(3);
 				ADD_MOVER((*scene->_objectP), 0, 23);
@@ -553,6 +560,8 @@ void Scene10::Action6::signal() {
 		} else {
 			setDelay(1);
 		}
+
+		_actionIndex = 4;
 		break;
 
 	case 4:
