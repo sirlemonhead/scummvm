@@ -124,7 +124,7 @@ public:
 	uint32 _currentScore;
 	int _field2022;
 
-	BackgroundTextualObject _obj1, _obj2, _obj3, _obj4;
+	BackgroundTextualObject _score, _obj2, _obj3, _obj4;
 	BackgroundTextualObject _obj5, _obj6, _obj7;
 	ASound _sound3, _sound4, _sound5;
 	ASound _sound6, _sound7;

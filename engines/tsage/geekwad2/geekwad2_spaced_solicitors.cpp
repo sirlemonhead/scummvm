@@ -1040,18 +1040,18 @@ void Scene10::setupScore() {
 		_numberBuffer = "0";
 	}
 
-	if (_bgSceneObjects.contains(&_obj1))
-		_bgSceneObjects.remove(&_obj1);
+	if (_bgSceneObjects.contains(&_score))
+		_bgSceneObjects.remove(&_score);
 
-	_obj1._maxWidth = 180;
-	_obj1._fontNumber = 11;
-	_obj1._fontFgColour = GW2_GLOBALS._scenePalette._colors.background;
-	_obj1._fontBgColour = GW2_GLOBALS._scenePalette._colors.background;
-	_obj1._fontFgColour2 = 0;
-	_obj1._textMode = ALIGN_CENTER;
-	_obj1._message = _numberBuffer;
-	_obj1.setup(0, 0, 0, 157, 15, 156, 1);
-	_obj1.draw();
+	_score._maxWidth = 180;
+	_score._fontNumber = 11;
+	_score._fontFgColour = GW2_GLOBALS._scenePalette._colors.background;
+	_score._fontBgColour = GW2_GLOBALS._scenePalette._colors.background;
+	_score._fontFgColour2 = 0;
+	_score._textMode = ALIGN_CENTER;
+	_score._message = _numberBuffer;
+	_score.setup(0, 0, 0, 157, 15, 156, 1);
+	_score.draw();
 }
 
 void Scene10::setupAction() {
